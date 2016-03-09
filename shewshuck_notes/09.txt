@@ -1,0 +1,226 @@
+ANISOTROPIC GAUSSIANS
+=====================
+  X ~ N(mu, Sigma)                     <==  X is a random d-vector with mean mu
+
+                     1                      1         T      -1
+  P(x) = -------------------------- exp ( - - (x - mu)  Sigma   (x - mu) )
+         sqrt(2 pi)^d sqrt(|Sigma|)         2
+                           ^ determinant of Sigma
+
+Sigma is the d-by-d SPD _covariance_matrix_.
+Sigma^-1 is the d-by-d SPD _precision_matrix_; serves as metric tensor.
+
+                                           T      -1
+Write P(x) = n(q(x)), where q(x) = (x - mu)  Sigma   (x - mu)
+             ^              ^
+     R->R, exponential   R^d -> R, quadratic
+
+[Now q(x) is a function we understand--it's just a quadratic bowl centered at
+ mu whose curvature is represented by the metric tensor Sigma^-1.  q(x) is the
+ squared distance from mu to x under this metric.  The other function n(.) is
+ like a 1D Gaussian with a different normalization factor.  It is helpful to
+ understand that this mapping n(.) does not change the isosurfaces.]
+
+Principle:  given f:R -> R, isosurfaces of f(q(x)) are same as q(x)
+            (different isovalues), except that some might be "combined"
+            [if f maps them to the same value]
+
+[Show example of paraboloid q(x) and bivariate Gaussian n(q(x)), w/univariate
+ Gaussian n(.) between them.]
+                                                  T        T          T
+_covariance_:  Cov(X, Y) = E[(X - E[X]) (Y - E[Y]) ] = E[XY ] - mu  mu
+               Var(X) = Cov(X, X)                                 X   Y
+               [These two definitions hold for both vectors and scalars.]
+
+For a Gaussian, one can show Var(X) = Sigma.
+[...by integrating the expectation in anisotropic spherical coordinates.]
+Hence
+          -                                                        -
+          |   Var(X_1)       Cov(X_1, X_2)    ...    Cov(X_1, X_d) |
+  Sigma = | Cov(X_2, X_1)      Var(X_2)              Cov(X_2, X_d) |
+          |      ...                                      ...      |
+          | Cov(X_d, X_1)    Cov(X_d, X_2)    ...      Var(X_d)    |
+          -                                                        -
+
+[An important point is that statisticians didn't just arbitrarily decide to
+ call this thing a covariance matrix.  Rather, statisticians discovered that
+ if you find the covariance of the normal distribution by integration, it turns
+ out that each covariance happens to be an entry in the matrix inverse to the
+ metric tensor.  This is a happy discovery; it's rather elegant.] 
+
+[Observe that Sigma is symmetric, as Cov(X_i, X_j) = Cov(X_j, X_i).]
+
+X_i, X_j independent   ==>   Cov(X_i, X_j) = 0
+Cov(X_i, X_j) = 0  AND  joint normal distribution   ==>   X_i, X_j independent
+all features pairwise independent   ==>   Sigma is diagonal
+Sigma is diagonal   <==>   axis-aligned Gaussian; squared radii on the diagonal
+                    <==>   P(X) = P(X_1) P(X_2) ... P(X_d)
+                           \__/   \______________________/
+                     multivariate     each univariate
+
+[So when the features are independent, you can write the multivariate Gaussian
+ as a product of univariate Gaussians.  When they aren't, you can do a change
+ of coordinates to the eigenvector coordinate system, and write it as a product
+ of univariate Gaussians in those coordinates.]
+
+[It's tricky to keep track of the relationships between the matrices, so here's
+ a handy chart.]
+
+            covariance                 precision
+              matrix                    matrix
+                                       (metric)
+                           inverse              -1
+     ----->   Sigma     <----------->  M = Sigma
+    /          ^                          ^
+    |          | |                        | |
+    |   square | |                 square | |
+    |          | | root                   | | root
+    |          | |                        | |
+    |            v                          v
+    |             1/2      inverse              -1/2
+    |        Sigma      <----------->  A = Sigma
+    |   (maps spheres to             (maps ellipsoids
+    |      ellipsoids)                  to spheres)
+    |
+    |          ^                     1/2
+    |          | eigenvalues of Sigma    are ellipsoid radii
+    |            (standard deviations along the eigenvectors) ---\
+    |                                                            |
+    eigenvalues of Sigma are variances along the eigenvectors    |
+                                |                                v
+                                v     T                1/2           1/2  T
+    Diagonalizing:  Sigma = V Lambda V            Sigma    = V Lambda    V
+
+[Remember that all four of these matrices have the same eigenvectors V.
+ Remember that when you take the inverse or square or square root of an SPD
+ matrix, you do the same to its eigenvalues.  So the ellipsoid radii, being the
+ eigenvalues of Sigma^1/2, are the square roots of the eigenvalues of Sigma;
+ moreover, they are the inverse square roots of the precision matrix (metric).]
+
+[Keep this chart handy when you do Homework 3.]
+
+
+Maximum likelihood estimation for anisotropic Gaussians
+-------------------------------------------------------
+Given samples x_1, ..., x_n and classes y_1, ..., y_n, find best-fit Gaussians.
+
+[Once again, we want to fit the Gaussian that maximizes the likelihood of
+ generating the samples in a specified class.  This time I won't derive the
+ maximum-likelihood Gaussian; I'll just tell you the answer.]
+
+For QDA:
+
+    ^      1                                  T
+  Sigma  = -     sum     (x  - mu ) (x  - mu )     <== _conditional_covariance_
+       C   n  {i:y  = C}   i     C    i     C          for samples in class C
+            C     i      \____________________/
+                          outer product matrix       [Show example maxlike.jpg]
+
+Priors pi_C, means mu_C:  same as before
+[Priors are class samples / total samples; means are per-class sample means]
+  ^
+Sigma_C is positive semidefinite, but not always definite!
+If some zero eigenvalues, must eliminate the zero-variance dimensions
+(eigenvectors).
+
+[I'm not going to discuss how to do that today, but it involves projecting the
+ samples onto a subspace along the eigenvectors with eigenvalue zero.]
+
+For LDA:
+
+    ^      1                                     T
+  Sigma  = - sum    sum     (x  - mu ) (x  - mu )     <== _pooled_within-class_
+           n  C  {i:y  = C}   i     C    i     C          _covariance_matrix_
+                     i
+
+[Notice that although we're computing one covariance matrix for all the data,
+ each sample contributes with respect to *its*own*class's*mean*.  This gives
+ a very different result than if you simply compute one covariance matrix for
+ all the samples using the global mean!  In the former case, the variances are
+ typically smaller.]
+
+
+[Let's revisit QDA and LDA and see what has changed now that we know
+ anisotropic Gaussians.  The short answer is "not much has changed".
+ By the way, capital X is once again a random variable.]
+
+QDA
+---
+pi , mu , Sigma  may be different for each class C.
+  C    C       C
+
+Choosing C that maximizes P(X = x | Y = C) pi  is equivalent to maximizing
+the _quadratic_discriminant_fn_              C
+                        d               1         1
+  Q (x) = ln (sqrt(2 pi)  P(x) pi ) = - - q (x) - - ln |Sigma | + ln pi
+   C                      ^      C      2  C      2          C         C
+                          |
+                    Gaussian for C                 [works for any # of classes]
+
+2 classes:  Prediction fn Q (x) - Q (x) is quadratic, but may be indefinite
+                           C       D
+            ==>  Bayes decision boundary is a quadric.
+
+            Posterior is P(Y = C | X = x) = s(Q (x) - Q (x))
+                                               C       D
+            where s(.) is logistic fn
+
+[Show example where decision boundary is a hyperbola:  two anisotropic
+ Gaussians, Q_C - Q_D, logistic fn, posterior.  Show anisotropic Voronoi
+ diagram.  Separate "whiteboard".]
+
+LDA
+---
+One Sigma for all classes.
+[Once again, the quadratic terms cancel each other out so the predictor
+ function is linear and the decision boundary is a hyperplane.]
+
+Q (x) - Q (x) =
+ C       D
+                           T       -1          T       -1
+           T      -1     mu_C Sigma   mu_C - mu_D Sigma   mu_D
+(mu  - mu )  Sigma   x - ------------------------------------- + ln pi  - ln pi
+   C     D                                 2                          C        D
+\____________________/ \_______________________________________________________/
+          T
+         w x          +                          alpha
+
+Choose class C that maximizes the _linear_discriminant_fn_
+
+    T      -1     1   T      -1
+  mu  Sigma   x - - mu  Sigma   mu  + ln pi        [works for any # of classes]
+    C             2   C           C        C
+
+                                  T
+2 classes:  Decision boundary is w x + alpha = 0
+                                               T
+            Posterior is P(Y = C | X = x) = s(w x + alpha)
+
+[Show example where decision boundary is a line:  two anisotropic Gaussians,
+ Q_C - Q_D, logistic fn, posterior.  Show ESL, Figure 4.11 (LDAdata.pdf):
+ example of LDA with messy data.  Separate "whiteboard".]
+
+
+Notes:
+- Changing prior pi_C (or loss) is easy:  adjust alpha.
+- LDA often interpreted as projecting samples onto normal vector w;
+  cutting the line in half.
+  [Show projection onto normal vector (project.png)]
+- For 2 classes, LDA has d+1 parameters (w, alpha);
+                 QDA has d(d+3)/2 + 1 parameters;
+                 QDA more likely to overfit.
+                 [Show comparison (ldaqda.pdf)]
+- With features, LDA can give nonlinear boundaries; QDA can give nonquadratic.
+- We don't get *true* optimum Bayes classifier
+  -- estimate distributions from finite data
+  -- real-world data not perfectly Gaussian
+- Posterior gives decision boundaries for 10% confidence, 50%, 90%, etc.
+  -- Choosing isovalue = probability p is same as choosing asymmetrical loss
+     p for false positive, (1 - p) for false negative.
+
+
+[LDA & QDA are best in practice for many applications.  In STATLOG project, LDA
+ or QDA were in the top three classifiers for 10 out of 22 datasets.  But it's
+ not because all those datasets are Gaussian.  LDA & QDA work well when the
+ data can only support simple decision boundaries such as linear or quadratic,
+ because Gaussian models provide stable estimates.]  [ESL, Section 4.3]

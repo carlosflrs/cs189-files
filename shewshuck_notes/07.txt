@@ -1,0 +1,230 @@
+GAUSSIAN DISCRIMINANT ANALYSIS
+==============================
+Fundamental assumption:  each class comes from normal distribution (Gaussian).
+
+                                                               2
+                 2                   1                 |x - mu|
+  X ~ N(mu, sigma ) :  P(x) = ---------------- exp ( - --------- )
+                              sqrt(2 pi) sigma         2 sigma^2
+
+For each class C, suppose we estimate mean mu_C, variance sigma_C^2, and
+prior pi_C = P(Y = C).
+
+Given x, Bayes rule r*(x) returns class C that maximizes P(X = x | Y = C) pi_C.
+
+ln z is monotonically increasing for z > 0, so it is equivalent to maximize
+
+                                                  2
+                                        |x - mu_C|
+  Q (x) = ln ( sqrt(2 pi) P(x) pi ) = - ----------- - ln sigma  + ln pi
+   C                             C      2 sigma_C^2           C        C
+  ^                       ^
+  | quadratic in x.       | normal distribution, replaces P(X = x | Y = C)
+
+[In a 2-class problem, you can also incorporate an asymmetrical loss function
+ the same way we incorporated the prior pi_C.  In a multi-class problem, it
+ gets a bit more complicated, because the penalty for guessing wrong might
+ depend not just on the true class, but also on the wrong guess.]
+
+QUADRATIC DISCRIMINANT ANALYSIS (QDA)
+===============================
+Suppose only 2 classes C, D.  Then
+
+          /   C      if Q (x) - Q (x) > 0,
+  r*(x) = |              C       D
+          \   D      otherwise
+
+Prediction fn is quadratic in x.  Bayes decision boundary is Q (x) - Q (x) = 0.
+                                                              C       D
+  - In 1D, B.d.b. may have 1 or 2 points.    [Solution to a quadratic equation]
+  - In d-D, B.d.b. is a quadric.                [In 2D, that's a conic section]
+
+[Show 2D Gaussian diagrams (from last lecture).]
+
+[The equations I wrote down above can apply to a one-dimensional feature space,
+ or they could apply equally well to a multi-dimensional feature space with
+ isotropic, spherical Gaussians.  In the latter case, x and mu are vectors, but
+ the variance is a scalar.  Next lecture we'll look at anisotropic Gaussians
+ where the variance is different along different directions.]
+
+[QDA works very nicely with more than 2 classes.  You typically wind up with
+ multiple decision boundaries that adjoin each other at joints.  The feature
+ space gets partitioned into regions.  In two or more dimensions, it looks like
+ a sort of Voronoi diagram.]
+
+[Show multiplicatively weighted Voronoi diagram.]
+
+[You might not be satisfied with just knowing how each point is classified.
+ One of the great things about QDA is that you can also determine the
+ probability that your classification is correct.  Let's work that out.]
+
+
+To recover posterior probabilities in 2-class case, use Bayes:
+
+                           P(X | Y = C) pi_C
+  P(Y = C | X) = -------------------------------------
+                 P(X | Y = C) pi_C + P(X | Y = D) pi_D
+
+                                                   Q_C(x)
+                                           recall e       = sqrt(2 pi) P(x) pi
+                                                                              C
+                           Q_C(x)
+                          e                       1
+  P(Y = C | X = x) = ----------------- = --------------------
+                      Q_C(x)    Q_D(x)        Q_D(x) - Q_C(x)
+                     e       + e         1 + e
+
+                   = s(Q (x) - Q (x)), where
+                        C       D
+                  1
+  s(gamma) = -----------    <===  _logistic_fn_ aka _sigmoid_fn_
+                  -gamma
+             1 + e
+
+[Show logistic fn.  s(0) = 1/2, s(inf) -> 1, s(-inf) -> 0, monoton increasing.]
+
+
+LINEAR DISCRIMINANT ANALYSIS (LDA)            [less likely to overfit than QDA]
+============================
+Fundamental assumption:  all the Gaussians have same variance sigma.
+
+[The equations simplify nicely in this case.]
+
+                                        2       2
+                  (mu_C - mu_D) . x   mu_C  - mu_D       
+  Q (x) - Q (x) = ----------------- - ------------- + ln pi  - ln pi
+   C       D           sigma^2          2 sigma^2          C        D
+                  \_______________/ \_______________________________/
+                        w . x      +             alpha
+
+[The quadratic terms in Q_C and Q_D cancelled each other out!]
+
+Now it's a linear classifier!  Choose C that maximizes _linear_discriminant_fn_
+
+                  2
+  mu_C . x      mu_C
+  -------- - --------- + ln pi                     [works for any # of classes]
+  sigma^2    2 sigma^2        C
+
+In 2-class case:  decision boundary is w . x + alpha = 0
+                  Bayes posterior is P(Y = C | X = x) = s(w . x + alpha)
+
+[The effect of "w . x + alpha" is to scale and translate the logistic fn
+ in x-space.  It's a linear transformation.]
+[Show two 1D Gaussians + logistic fn.]
+[Show Voronoi diagram.]
+                                                             mu_C + mu_D
+If pi  = pi  = 1/2   ===>   (mu  - mu ) . x - (mu  - mu ) . (-----------) = 0
+     C     D                   C     D           C     D          2
+
+This is the centroid method!
+
+
+MAXIMUM LIKELIHOOD ESTIMATION OF PARAMETERS (Ronald Fisher, circa 1912)
+===========================================
+[Before I talk about fitting Gaussians, I want to start with a simpler example.
+ It's easier to understand maximum likelihood if we consider a discrete
+ distribution first; then a continuous distribution later.]
+
+Let's flip biased coins!  Heads with probability p; tails w/prob. 1 - p.
+
+10 flips, 8 heads, 2 tails.  What is most likely value of p?
+
+Binomial distribution:  X ~ B(n, p)
+
+             /n\  x        n - x
+  P[X = x] = | | p  (1 - p)
+             \x/
+
+Our example:  n = 10,
+
+                 8        2      def
+  P[X = 8] = 45 p  (1 - p)        =  L(p)
+
+Probability of 8 heads in 10 flips:
+written as a fn L(p) of distribution parameter(s), this is the _likelihood_fn_.
+
+_Maximum_likelihood_estimation_ (MLE):  A method of estimating the parameters
+of a statistical model by picking the params that maximize the likelihood fn.
+
+[Let's phrase it as an optimization problem.]
+
+  --------------------------------
+  |  Find p that minimizes L(p)  |
+  --------------------------------
+
+[Show graph of L(p).]
+
+Solve this example by setting derivative = 0:
+
+  dL        7        2       8
+  -- = 360 p  (1 - p)  - 90 p  (1 - p) = 0
+  dp
+
+  ===>    4 (1 - p) - p = 0    ===>    p = 0.8
+
+[It shouldn't seem surprising that a coin that comes up heads 80% of the time
+ is the coin most likely to produce 8 heads in 10 flips.]
+
+       d^2L
+Note:  ---- = -18.8744 < 0   at p = 0.8, confirming it's a maximum.
+       dp^2
+
+
+LIKELIHOOD OF A GAUSSIAN
+========================
+Given samples x_1, x_2, ..., x_n (scalars or vectors), find best-fit Gaussian.
+
+[Let's do this with a normal distribution instead of a binomial distribution.
+ If you generate a random point from a normal distribution, what is the
+ probability that it will be exactly at the mean of the Gaussian?]
+
+[Zero.  So it might seem like we have a bit of a problem here.  With a
+ continuous distribution, the probability of generating any particular point
+ is zero.  But we're just going to ignore that and do "likelihood" anyway.]
+
+Likelihood of generating these samples is
+
+  L(mu, sigma; x_1, ..., x_n) = P(x_1) P(x_2) ... P(x_n)
+
+The _log_likelihood_ l(.) is the ln of the likelihood L(.).
+Maximizing likelihood  <==>  maximizing log-likelihood.
+
+  l(mu, sigma; x_1, ..., x_n) = ln P(x_1) + ln P(x_2) + ... + ln P(x_n)
+
+                               dl
+  Want to set grad   l = 0,  ------- = 0
+                  mu         d sigma
+                      2
+              |x - mu|
+  ln P(x) = - --------- - ln sqrt(2 pi) - ln sigma  [ln of normal distribution]
+              2 sigma^2
+
+              n  x_i - mu                 ^    1  n            [The ^hats^ mean
+  grad   l = sum -------- = 0    ====>    mu = - sum x_i        "estimated"]
+      mu     i=1 sigma^2                       n i=1
+                          2        2
+    dl       n  |x_i - mu|  - sigma                    ^  2   1  n           2
+  ------- = sum ------------------ = 0      ====>    sigma  = - sum |x  - mu|
+  d sigma   i=1      sigma^3                                  n i=1   i
+
+                                        ^                      ^
+We don't know mu exactly, so substitute mu for mu to compute sigma.
+
+In short, we use mean & variance of samples in class C to estimate
+mean & variance of Gaussian for class C.
+
+For QDA:  estimate mean & variance of each class as above
+        & estimate the priors (for each class C):
+
+   ^      n_C
+  pi  = -------                              [this is the coin flip parameter!]
+    C   sum n_D  <==  sum of samples in all classes
+         D
+
+For LDA:  same mean & priors; one variance for all classes:
+
+    ^  2   1                          2
+  sigma  = - sum    sum     |x  - mu |
+           n  C  {i:y  = C}   i     C
+                     i

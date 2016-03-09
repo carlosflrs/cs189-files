@@ -1134,7 +1134,27 @@
 							\item Easy and elegant treatment of "partial" class membership; LDA is all-or-nothing.
 							\item More robust on some non-gaussian distributions (e.g. large skew).
 						\end{itemize}
+					\item ROC Curve
+						\begin{center}
+							\includegraphics[scale=0.5]{images/ROCCurve}
+						\end{center}
 				\end{itemize}
+				
+				\item[Least-Squares Polynomial Regression]
+				\
+					\begin{itemize}
+						\item Replace each $X_{i}$ with feature vector $\Phi(X_{i})$ with all terms of degree $0 \dots p$.
+						\item e.g. $\phi(X_{i}) = \begin{bmatrix}
+												X_{i1}^{2} & X_{i1}X_{i2} & X_{i2}^{2} & X_{i1} & X_{i2} & 1 
+ 											\end{bmatrix}^{T}
+ 											$
+ 						\item Can also use non-polynomial features (e.g. edge detectors).
+ 						\item Otherwise just like linear or logistic regression.
+ 						\item Logistic regression plus quadratic features = same logistic posteriors as QDA. Very easy to overfit!
+							\begin{center}
+								\includegraphics[scale=0.5]{images/polyregression}
+							\end{center}
+					\end{itemize}
 \end{description}
 
 \end{document}
