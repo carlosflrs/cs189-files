@@ -1,0 +1,45 @@
+### Lecture 01/20/16: Introduction to Machine Learning
+
+    # Core Material
+        - Finding patterns in data; using them to make predictions
+            (wow cool pattern dude!).
+        - Models and statistics that help us understand the patterns.
+        - Numerical optimization algorithms that "learn" the patterns.
+        - Convert data and think of it as if it was part of an n dimensional
+        space. Can we build a wall s.t some of them are clustered on one side
+        of the wall and the others on another side of the wall.
+        - Biggest problem with over-fitting is that it is very vulnerable to
+        outliers. Outliers have a disproportionate influence in the
+        prediction. Nearest neighbor tends to do badly in higher dimensions.
+        Distances become fussier, and many more things can be close to each
+        other. 
+
+    # Validation: Testing whether we can make good predictions
+        - Train classifier: it learns to distinguish 7s and 1s for instance.
+        - Test the classifier on NEW images.
+        - 2 kinds of error:
+            - Training set error: Error on the data we trained on.
+            - Test set error: Try out new images; not used during training.
+        - Outliers: samples whose labels are atypical
+        - Over-fitting: when the test error deteriorates because the
+        classifier becomes too sensitive to outliers or other patterns.
+        - Generalization: you don't over-fit.
+        - Most Machine Learning (ML) algorithms have few "hyper parameters"
+        that control over/under-fitting.
+            - Example: choosing k in k-nearest neighbors.
+            - Linear, quadratic, cubic classifiers.
+        - We select parameters by validation:
+            - Hold back training data, called the validation set.
+            - Train the classifier multiple times with different hyper
+            parameter settings.
+        - Choose settings that worked best on the validation set.
+        - Now we have 3 different sets:
+            - Training set used to learn the model weights.
+            - Validation set used to tune hyper parameters.
+            - Test set used once as a FINAL validation of the model.
+
+    # Misc
+        - Kaggle, runs ML competitions including our homework assignments.
+        - We will use 2 test sets:
+            - Public set results available during competition.
+            - Private set revealed after homework due date.
