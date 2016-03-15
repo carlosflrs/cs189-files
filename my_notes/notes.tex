@@ -14,9 +14,8 @@
 
 \begin{document}
 \section*{01/25/2016}
-\begin{description}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\item[Classifiers]
+\subsection*{Classifiers}
 		\ 
 		\begin{itemize}
 			\item You are given a set of n \underline{samples}, each with d features.
@@ -48,7 +47,7 @@
 		\end{itemize}
 		
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\item[Math Review]
+	\subsection*{Math Review}
 		\
 		\begin{itemize}
 			\item \underline{Vectors}:
@@ -174,7 +173,7 @@
 			\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\item[Perceptron algorithm]
+	\subsection{Perceptron algorithm}
 		\
 		\begin{itemize}
 			\item (Frank Rosenblatt, 1957) Slow, but correct for linearly separable samples. Uses a \underline{numerical optimization} algorithm: \underline{gradient descent}.
@@ -217,13 +216,11 @@
 			
 			\item \textbf{\underline{Goal}: Solve this \underline{optimization problem}; Find $w$ that minimizes $R(w)$.}
 	\end{itemize}
-\end{description}
 
 \newpage
 \section*{01/27/2016}
-\begin{description}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-	\item[Perceptron algorithm continued]
+	\subsection{Perceptron algorithm continued}
 	\
 		\begin{itemize}
 			\item \underline{Duality} between x-space and w-space:\\
@@ -249,7 +246,7 @@
 		\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\item[Optimization algorithm 1]: Gradient descent on $R$.
+	\subsection{Optimization algorithm 1}: Gradient descent on $R$.
 		\begin{itemize}
 			\item Given a starting point $w$, find gradient of $R$ with respect to $w$; this is the direction of the steepest ascent. Take a step in the opposite direction.
 				\begin{align*}
@@ -288,7 +285,7 @@
 			\item Problem: Slow! Each step takes $\mathcal{O}(nd)$ time.
 		\end{itemize}
 	
-	\item[Optimization algorithm 2]: Stochastic gradient descent
+	\subsection*{Optimization algorithm 2}: Stochastic gradient descent
 		\
 		\begin{itemize}
 			\item Idea: Each step, pick \underline{one} misclassified $x_{i}$; do gradient descent on loss function $L(x_{i} \cdot w, y_{i})$.
@@ -323,7 +320,7 @@
 		\item Perceptron Convergence Theorem: If data is linearly separable, perceptron algorithm finds a correct linear classifier in at most $\mathcal{O}(\frac{R^{2}}{\gamma^{2}})$ iterations; where $R = \max |X_{i}|$ is the "radius of data" and $\gamma$ is the "margin"  (length of longest feature vector).
 		\end{itemize}
 		
-	\item[Maximum Margin Classifiers]
+	\subsection*{Maximum Margin Classifiers}
 		\
 		\begin{itemize}
 			\item The margin of a linear classifier is the distance from the decision boundry to the nearest sample.
@@ -357,12 +354,10 @@
 			\item It has one unique solution!
 			\item The solution gives us a \underline{maximum margin classifier}, aka a \underline{hard margin support vector machine} (SVM).
 		\end{itemize}
-\end{description}
 
 \newpage
 \section*{02/08/2016}
-\begin{description}
-	\item[Decision Theory]
+	\subsection*{Decision Theory}
 	\
 	\begin{itemize}
 		\item Multiple samples with different classes could lie on the same point.
@@ -462,7 +457,7 @@
 			\end{center}
 	\end{itemize}
 	
-	\item[3 Ways to Build Classifiers]
+	\subsection*{3 Ways to Build Classifiers}
 	\
 		\begin{enumerate}
 			\item Generative models (e.g. LDA)
@@ -489,12 +484,10 @@
 			\item Advantage of (1): you can diagnose outliers: $P(x)$ is very small.
 			\item Disadvantages of (1): often hard to estimate distribution accurately; real distributions rarely match standard ones.
 		\end{itemize}
-\end{description}
 
 \newpage
 \section*{02/10/2016}
-\begin{description}
-	\item[Gaussian Discriminant Analysis]
+	\subsection*{Gaussian Discriminant Analysis}
 		\
 		\begin{itemize}
 			\item Fundamental assumption: each class comes from a normal distribution (Gaussian).
@@ -512,7 +505,7 @@
 			\item $Q_{c}(x)$ is quadratic in $x$.
 		\end{itemize}
 	
-	\item[Quadratic Discriminant Analysis (QDA)]
+	\subsection*{Quadratic Discriminant Analysis (QDA)}
 		\
 		\begin{itemize}
 			\item Suppose only 2 classes c, d, Then,
@@ -550,7 +543,7 @@
 				\end{itemize}
 		\end{itemize}
 		
-	\item[Linear Discriminant Analysis (LDA)]
+	\subsection*{Linear Discriminant Analysis (LDA)}
 		\
 		\begin{itemize}
 			\item Fundamental assumption: all the Gaussians have the same variance $\sigma$ only difference between classes is the mean $\mu_{i}$.
@@ -568,7 +561,7 @@
 			\item In 2-class case, Bayes posterior is $P(Y=c|X=x) = s(w\cdot x + \alpha)$
 		\end{itemize}
 	
-	\item[Maximum Likelihood Estimation of Parameters] (Ronald Fisher, circa 1912)
+	\subsection*{Maximum Likelihood Estimation of Parameters} (Ronald Fisher, circa 1912)
 		\
 		\begin{itemize}
 			\item Lets flip biased coins. Heads with probability $p$; tails with probability $1-p$.
@@ -598,7 +591,7 @@
 			\item The \underline{log likelihood} $\mathcal{L}(\cdot)$ is the $\ln$ of the likelihood $\mathcal{L}(\cdot)$.
 		\end{itemize}
 	
-	\item[Likelihood of a Gaussian]
+	\subsection*{Likelihood of a Gaussian}
 		\
 		\begin{itemize}
 			\item Given samples $x_{1}, x_{2}, \dots, x_{n}$ find best-fit Gaussian.
@@ -630,12 +623,10 @@
 					\hat{\sigma^{2}} = \frac{1}{n} \sum_{c} \sum_{i:y_{i}=c} |x_{i} - \mu_{c}|^{2}
 				\end{align*}
 		\end{itemize}
-\end{description}
 
 \newpage
 \section*{02/17/2016}
-\begin{description}
-	\item[Eigenvectors]
+	\subsection*{Eigenvectors}
 	\
 		\begin{itemize}
 			\item Given a matrix A, if $Av = \lambda v$ for some vector $v \neq 0$, scalar $\lambda$, then $v$ is an \underline{eigenvector} of A and $\lambda$ is the associated \underline{eigenvalue} of A.
@@ -693,7 +684,7 @@
 			\item Special case: $M$ and $A$ are diagonal matrices $\Leftrightarrow$ eigenvectors are coordinate axes $\Leftrightarrow$ ellipsoids are axis-aligned.
 		\end{itemize} 
 	
-	\item[Building a Quadratic with specified eigenvectors and eigenvalues]
+	\subsection*{Building a Quadratic with specified eigenvectors and eigenvalues}
 		\
 		\begin{itemize}
 			\item Choose $n$ mutually orthogonal unit n-vectors $v_{1}, \dots, v_{n}$ Let, $V = [v_{1}, v_{2}, \dots, v_{n}]$
@@ -723,11 +714,10 @@
 					\item reassemble matrix $A$.
 				\end{itemize}
 		\end{itemize}
-\end{description}
+
 \newpage
 \section*{02/22/2016}
-\begin{description}
-	\item[Anisotropic Multivariate Gaussians]
+	\subsection*{Anisotropic Multivariate Gaussians}
 		\
 		\begin{itemize}
 			\item $X \sim \mathcal{N}(\mu, \Sigma) \Leftarrow X$ is random d-vector with mean $\mu$.
@@ -794,7 +784,7 @@
 				\end{itemize}
 			\end{itemize}
 		
-		\item[Maximum Likelihood estimation for anisotropic Gaussians]
+		\subsection*{Maximum Likelihood estimation for anisotropic Gaussians}
 			\
 			\begin{itemize}
 				\item Given samples $x_{1}, \dots, x_{n}$ and classes $y_{1}, \dots y_{n}$ find the best-fit Gaussians.
@@ -867,11 +857,11 @@
 							\end{center}
 					\end{itemize}
 			\end{itemize}
-\end{description}
+
+
 \newpage
 \section*{02/24/2016}
-\begin{description}
-	\item[Regression] aka fitting curves to data
+	\subsection*{Regression} aka fitting curves to data
 	\begin{itemize}
 		\item Classification: given sample $x$, predict class (often binary).
 		\item Regression given sample, $x$, predict a numerical value.
@@ -924,7 +914,7 @@
 			\end{center}
 	\end{itemize}
 	
-	\item[Least-Squares Linear Regression] 1 + A + a.
+	\subsection*{Least-Squares Linear Regression} 1 + A + a.
 	\begin{itemize}
 		\item Optimization problem:
 			\begin{center}
@@ -1011,7 +1001,7 @@
 				\end{itemize}
 	\end{itemize}
 	
-	\item[Logistic Regression] (David Cox, 1953) 3 + C + a
+	\subsection*{Logistic Regression} (David Cox, 1953) 3 + C + a
 		\begin{itemize}
 			\item Fits "probabilities" in range (0, 1).
 			\item Usually used for classification. The input $y_{i}$'s can be probabilities, but in most applications they are all 0 or 1.
@@ -1050,12 +1040,11 @@
 				\includegraphics[scale=0.5]{images/regression}
 			\end{center}
 		\end{itemize}
-\end{description}
+
 
 \newpage
 \section*{02/29/2016}
-\begin{description}
-	\item[Weighted Least-Squares Regression]
+	\subsection*{Weighted Least-Squares Regression}
 	\
 	\begin{itemize}
 		\item Assign each sample a weight $\omega_{i}$; collect them in an $n$x$n$ diagonal matrix $\Omega$.
@@ -1079,7 +1068,7 @@
 		\item Note: $\Omega^{\frac{1}{2}}\hat{y}$ is orthogonal projections of $\Omega^{\frac{1}{2}}y$ onto subspace spanned by columns of $\Omega^{\frac{1}{2}}X$.
 	\end{itemize}
 	
-	\item[Newton's Method]
+	\subsection*{Newton's Method}
 	\
 		\begin{itemize}
 			\item Iterative optimization method for smooth functions $J(w)$ often much faster than gradient descent.
@@ -1112,7 +1101,7 @@
 				\end{itemize}
 		\end{itemize}
 		
-		\item[Logistic Regression]
+		\subsection*{Logistic Regression}
 			\
 			\begin{itemize}
 				\item Recall: $s'(\gamma) = s(\gamma)(1 - s(\gamma))$, $s_{i} = s(X_{i}\cdot w)$.
@@ -1137,8 +1126,8 @@
 				\item Idea: If n very large, save time by using a random subsample of the samples per iteration. Increase sample size as you go.
 			\end{itemize}
 			
-			\item[LDA vs. Logistic regression]
-			\
+		\subsection*{LDA vs. Logistic regression}
+		\
 				\begin{itemize}
 					\item Advantages of LDA:
 						\begin{itemize}
@@ -1169,7 +1158,7 @@
 						\end{itemize}
 				\end{itemize}
 				
-				\item[Least-Squares Polynomial Regression]
+		\subsection*{Least-Squares Polynomial Regression}
 				\
 					\begin{itemize}
 						\item Replace each $X_{i}$ with feature vector $\Phi(X_{i})$ with all terms of degree $0 \dots p$.
@@ -1184,12 +1173,10 @@
 								\includegraphics[scale=0.5]{images/polyregression}
 							\end{center}
 					\end{itemize}
-\end{description}
 
 \newpage
 \section*{03/02/2016}
-\begin{description}
-	\item[Statistical Justification for Regression]
+	\subsection*{Statistical Justification for Regression}
 	\
 	\begin{itemize}
 		\item Typical model of reality:
@@ -1204,7 +1191,7 @@
 		\item Ideal approach: choose $h(x) = E_{y}[Y | X=x]$
 	\end{itemize} 
 	
-	\item[Least-squares Regression from Max Likelihood]
+	\subsection*{Least-squares Regression from Max Likelihood}
 	\
 	\begin{itemize}
 		\item Suppose $\epsilon_{i} \sim \mathcal{N}(0, \sigma^{2})$; then $y_{i}|X_{i} \sim \mathcal{N}(f(X_{i}), \sigma^{2})$.
@@ -1216,7 +1203,7 @@
 		\item Takeaway: If you apply the principle of max likelihood to linear regression with an input model that assumes gaussian noise $\Rightarrow$ find $f$ by least-squares. 
 	\end{itemize}
 	
-	\item[Empirical Risk]
+	\subsection*{Empirical Risk}
 	\
 	\begin{itemize}
 		\item The \underline{risk} for hypothesis $h$ is the expected loss $R(h) = E[L]$ over all $X, Y$.
@@ -1226,7 +1213,7 @@
 		\item Takeaway: this is why we minimize the sum of loss functions.
 	\end{itemize}
 	
-	\item[Logistic regression from Max Likelihood]
+	\subsection*{Logistic regression from Max Likelihood}
 	\
 	\begin{itemize}
 		\item If we accept the logistic regression function, what cost function should we use?
@@ -1249,7 +1236,7 @@
 		\item which is negated logistic cost function J(w).
 	\end{itemize}
 	
-	\item[The Bias-variance Decomposition]
+	\subsection*{The Bias-variance Decomposition}
 	\
 	\begin{itemize}
 		\item There are 2 sources of error in a hypothesis h:
@@ -1329,12 +1316,10 @@
 					\item Takeaways: Bias can be zero when hypothesis function can fit the real one. Variance portion of RSS (overfitting) decreases as $\frac{1}{n}$, increases as $d$.
 				\end{itemize}
 	\end{itemize}
-\end{description}
 
 \newpage
 \section*{03/07/2016}
-\begin{description}
-	\item[Ridge Regression] (aka Tikhonov regularization)
+	\subsection*{Ridge Regression} (aka Tikhonov regularization)
 	\
 	\begin{itemize}
 		\item (1) + (A) + $\ell_{2}$ penalized mean loss (d).
@@ -1375,7 +1360,7 @@
 		\item Alternative: Use asymmetric penalty by replacing $I'$ with other diagonal matrix.
 	\end{itemize} 
 	
-	\item[Bayesian justification for ridge regression]
+	\subsection*{Bayesian justification for ridge regression}
 	\
 	\begin{itemize}
 		\item Assign a prior probability on $w'$: a Gaussian centered at 0.
@@ -1384,7 +1369,7 @@
 		\item This method (using likelihood, but maximizing posterior) is called \underline{maximum a posteriori} (MAP).
 	\end{itemize}
 	
-	\item[Kernels]
+	\subsection*{Kernels}
 	\
 	\begin{itemize}
 		\item Recall: with $d$ input features, degree-p polynomials blow up to $\mathcal{O}(d^{p})$ features.
@@ -1398,7 +1383,7 @@
 			\end{itemize}
 	\end{itemize}
 	
-	\item[Kernel Ridge Regression]
+	\subsection*{Kernel Ridge Regression}
 	\
 	\begin{itemize}
 		\item \underline{Center} $X$ and $y$ so their means are zero; $X_{i} \leftarrow X_{i} - \mu_{x}$. By centering the matrix we minimize the penalization of $\alpha$
@@ -1437,7 +1422,7 @@
 		\item Primal: solve $d$x$d$ linear system.
 	\end{itemize}
 	
-	\item[The Kernel Trick] (aka \underline{kernelization})
+	\subsection*{The Kernel Trick} (aka \underline{kernelization})
 	\
 	\begin{itemize}
 		\item The \underline{polynomial kernel} of degree $p$ is $k(x,z) = (x^{T}z + 1)^{p}$.
@@ -1465,12 +1450,11 @@
 				\item Let $k(x, z) = \phi(x)^{T}\phi(z)$.	
 			\end{itemize} 
 	\end{itemize}
-\end{description}
+
 
 \newpage
 \section*{03/09/2016}
-\begin{description}
-	\item[Kernels] continued
+	\subsection*{Kernels} continued
 	\begin{itemize}
 		\item \underline{Kernel Perceptrons}
 		\item Note: Everywhere below, we can replace $X_{i}$ with $\phi(X_{i})$
@@ -1504,7 +1488,7 @@
 		\item Second loop runs in $\mathcal{O}(nd)$ time or we can compute $w=X^{T}a$ once in $\mathcal{O}(nd')$ time and evaluate test points in $\mathcal{O}(d')$ time per point, where $d'$ is the length of $\phi(\cdot)$.
 	\end{itemize}
 
-	\item[Kernel Logistic Regression]
+	\subsection*{Kernel Logistic Regression}
 	\
 	\begin{itemize}
 		\item Stochastic gradient ascent step:
@@ -1518,7 +1502,7 @@
 		\item for each test point $z$: $h(z) \leftarrow s(\sum_{j=1}^{n} a_{j}k(X_{j}, z))$.
 	\end{itemize}
 	
-	\item[The Gaussian Kernel]
+	\subsection*{The Gaussian Kernel}
 	\
 	\begin{itemize}
 		\item \underline{Gaussian kernel}, aka \underline{radial basis function kernel}
@@ -1542,53 +1526,5 @@
 				\item Choose by (cross)-validation.
 			\end{itemize}
 	\end{itemize}
-\end{description}
+
 \end{document}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
