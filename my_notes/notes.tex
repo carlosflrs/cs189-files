@@ -451,7 +451,7 @@
 					&= P(Y=1)\int_{x} L(r(x), 1)P(X=x|Y=1)dx +
 					P(Y=-1)\int_{x} L(r(x), -1)P(X=x|Y=-1)dx\\
 			\end{align*}
-		\item If $L$ is 0-1 loss, $R(r) = P(r(x) \ \text{is wrong})$\\
+		\item If $L$ is 0-1 loss, $R(r) = P(r(x)) \ \text{is wrong}$\\
 		\item For Bayes decision rule, Bayes Risk is the area under the minimum of the functions above. Assuming $L(z,y) = 0$ for $x=y$:
 			\begin{align*}
 			R(r^{*}) = \int min_{y \pm 1} L(-y, y)P(X=x|Y=y)P(Y=y)dx\\
@@ -531,7 +531,7 @@
 				\begin{align*}
 					P(Y=c|X) = \frac{P(X|Y=c)\pi_{c}}{P(X|Y=c)\pi_{c} + P(X|Y=d)\pi_{d}}
 				\end{align*}
-			\item Recall $e^{Q_{c}(x) = \sqrt{2\pi}P(x)\pi_{c}}$.
+			\item Recall $e^{Q_{c}(x)} = \sqrt{2\pi}P(x)\pi_{c}$.
 				\begin{align*}
 					P(Y=c|X=x) &= \frac{e^{Q_{c}(x)}}{e^{Q_{c}(x)} + e^{Q_{d}(x)}}\\
 					&= \frac{1}{1 + e^{Q_{c}(x) - Q_{d}(x)}}\\
@@ -611,7 +611,7 @@
 					l(\mu, \sigma) = \ln \sum_{i=1}^{n} P(x_{i})
 				\end{align*}
 			\item Want to set $\triangledown_{\mu} l = 0$, and  $\frac{\partial l}{\partial \sigma} = 0$.
-			\item Natura log of Gaussian distribution,
+			\item Natural log of Gaussian distribution,
 				\begin{align*}
 					\ln P(x) = -\frac{|x-\mu|^{2}}{2\sigma^{2}} - \ln \sqrt{2\pi} - \ln \sigma\\
 				\end{align*}
@@ -696,8 +696,8 @@
 	\item[Building a Quadratic with specified eigenvectors and eigenvalues]
 		\
 		\begin{itemize}
-			\item Choose $n$ mutually orthogonal unit n-vecotrs $v_{1}, \dots, v_{n}$ Let, $V = [v_{1}, v_{2}, \dots, v_{n}]$
-			\item Observe: $V^{T}V = I \Rightarrow V^{T} = V^{-1} \Rightarrow VV^{Y} = I$.
+			\item Choose $n$ mutually orthogonal unit n-vectors $v_{1}, \dots, v_{n}$ Let, $V = [v_{1}, v_{2}, \dots, v_{n}]$
+			\item Observe: $V^{T}V = I \Rightarrow V^{T} = V^{-1} \Rightarrow VV^{T} = I$.
 			\item $V$ is \underline{orthogonal matrix}: acts like rotation (or reflection).
 			\item Choose some inverse radii $\lambda_{i}$:
 			\item Let,
@@ -710,7 +710,7 @@
 							0 & 0 & \dots & \lambda_{n}\\
 						\end{bmatrix}
 				\end{align*}
-			\item Theorem: $A = V\Lambda V^{T} = \sum_{i=1}^{n} \lambda_{i} v_{i}v_{i}^T$ has choses eigenvectors and eigenvalues.
+			\item Theorem: $A = V\Lambda V^{T} = \sum_{i=1}^{n} \lambda_{i} v_{i}v_{i}^T$ has chosen eigenvectors and eigenvalues.
 			\item Proof: $AV = V\Lambda \Leftarrow$ definition of eigenvectors! (in matrix form).
 			\item This is a \underline{matrix factorization} called the \underline{eigen-decomposition}
 			\item $\Lambda$ is the diagonalized version of $A$.
@@ -765,9 +765,31 @@
 							\Sigma \ \text{is diagonal} &\Leftrightarrow \text{axis-aligned Gaussian; squared radii on the diagonal}.\\
 							&\Leftrightarrow P(x) = P(X_{1})P(X_{2}) \dots P(X_{d})\\
 						\end{align*}
-						\begin{center}
-							\includegraphics[scale=0.5]{images/chart}
-						\end{center}
+
+\begin{center}						
+\begin{tikzpicture}
+[ar/.style={->,thick},no/.style={}]
+\node [no][label={\small Covariance Matrix}] at (0cm,4cm) (A) {$\Sigma$};
+\node [no][label={\small Precision Matrix (Metric)}] at (6cm,4cm) (B) {$M = \Sigma^{-1}$};
+\node [no][label=below:{\small (Maps ellipsoids to spheres)}] at (6cm,2cm) (D) {$A=\Sigma^{-1/{2}}$};
+\node [no][label=below:{\small (Maps spheres to ellipsoids)}] at (0cm,2cm) (E) {$\Sigma^{1/{2}}$};
+
+\draw [-latex] (A) -- node[above] {inverse} (B);
+\draw [-latex] (B) -- node[above] {} (A);
+
+\draw [-latex] (A) to[bend right=10] node[left] {$\sqrt{}$} (E);
+\draw [-latex] (E) to[bend right=10] node[right] {square} (A);
+
+\draw [-latex] (B) to[bend right=10] node[left] {$\sqrt{}$} (D);
+\draw [-latex] (D) to[bend right=10] node[right] {square} (B);
+
+
+\draw [-latex] (D) -- node[above] {inverse} (E);
+\draw [-latex] (E) -- node[above] {} (D);
+\end{tikzpicture}
+\end{center}	
+					\item Eigenvalues of $\Sigma^{1/{2}}$ are ellipsoid radii (standard deviations along the eigenvectors).
+					\item Eigenvalues of $\Sigma$ are variances along along eigenvectors.
 					\item Diagonalizing $\Sigma = V\Lambda V^{T}$, $\Sigma^{\frac{1}{2}} = V\Lambda^{\frac{1}{2}}V^{T}$.
 				\end{itemize}
 			\end{itemize}
@@ -813,7 +835,7 @@
 							\begin{align*}
 								Q_{c}(x) - Q_{d}(x) &= (\mu_{c} - \mu_{d})^{T} \Sigma^{-1}x - \frac{\mu_{c}^{T}\Sigma^{-1}\mu_{c} - \mu_{d}^{T}\Sigma^{-1}\mu_{d}}{2} + \ln \pi_{c} - \ln \pi_{d}
 							\end{align*}
-						\item Chose class c that maximizes the \underline{linear discriminant function},
+						\item Choose class c that maximizes the \underline{linear discriminant function},
 							\begin{align*}
 								\mu^{T}\Sigma^{-1}x - \frac{1}{2}\mu_{c}^{T}\Sigma^{-1}\mu_{c} + \ln \pi_{c}
 							\end{align*}
@@ -865,7 +887,7 @@
 		\end{itemize}
 		\item Some regression functions:
 			\begin{enumerate}
-				\item Linera: $h(x; w, \alpha) = w^{T}x + \alpha$.
+				\item Linear: $h(x; w, \alpha) = w^{T}x + \alpha$.
 				\item Polynomial.
 				\item Logistic: $h(x; w, \alpha) = s(w^{T}x + \alpha)$. Recall: logistic function $s(\gamma) = \frac{1}{1 + e^{-\gamma}}$
 			\end{enumerate}
@@ -877,11 +899,11 @@
 			\end{enumerate}
 		\item Some cost functions to minimize:
 			\begin{enumerate}
-				\item[a.] $j(h) = \frac{1}{n}sum_{i=1}^{n}L(h(X_{i}),y_{i})$ \underline{mean loss}.
-				\item[b.] $j(h) = \max_{i=1}^{n} L(h(X_{i}, y_{i}))$ \underline{maximum loss}.
-				\item[c.] $j(h) = \sum \omega_{i}L(h(X_{i}, y_{i})$ \underline{weighted sum}.
-				\item[d.] $j(h) = \frac{1}{n}\sum L(h(X_{i}, y_{i}) + \lambda|w|^{2}$ \underline{$\ell_{2}$ penalized/regularized}.
-				\item[e.] $j(h) = \frac{1}{n}\sum L(h(X_{i}, y_{i}) + \lambda|w|$ \underline{$\ell_{1}$ penalized/regularized}.
+				\item[a.] $J(h) = \frac{1}{n}sum_{i=1}^{n}L(h(X_{i}),y_{i})$ \underline{mean loss}.
+				\item[b.] $J(h) = \max_{i=1}^{n} L(h(X_{i}, y_{i}))$ \underline{maximum loss}.
+				\item[c.] $J(h) = \sum \omega_{i}L(h(X_{i}, y_{i}))$ \underline{weighted sum}.
+				\item[d.] $J(h) = \frac{1}{n}\sum L(h(X_{i}, y_{i})) + \lambda|w|^{2}$ \underline{$\ell_{2}$ penalized/regularized}.
+				\item[e.] $J(h) = \frac{1}{n}\sum L(h(X_{i}, y_{i})) + \lambda|w|$ \underline{$\ell_{1}$ penalized/regularized}.
 			\end{enumerate}
 			\item Some combinations:
 			\
@@ -909,7 +931,7 @@
 				\begin{tabular}{|c|}
 					\hline
 					Find $w, \alpha$ that minimizes
-					$\sum_{i=1}^{n} (X_{i}\cdot w + \alpha - y_{i})^{2}$\\
+					$\sum_{i=1}^{n} (x_{i}\cdot w + \alpha - y_{i})^{2}$\\
 					\hline
 				\end{tabular}\\
 				[1em]
@@ -925,7 +947,7 @@
 					\vdots & \vdots & \hdots & \\
 					x_{n1} & x_{n2} & \dots & x_{nd}\\
 				\end{bmatrix}$
-				\item Usually n > d.
+				\item Usually $n > d$.
 				\item Sample row vector is $X_{i}^{T}$.
 				\item Column vector is $X_{*j}$.
 				\item $y = \begin{bmatrix}
@@ -989,7 +1011,7 @@
 				\end{itemize}
 	\end{itemize}
 	
-	\item[Logistic Regression] (David Cox, 1953) 3 + C + s
+	\item[Logistic Regression] (David Cox, 1953) 3 + C + a
 		\begin{itemize}
 			\item Fits "probabilities" in range (0, 1).
 			\item Usually used for classification. The input $y_{i}$'s can be probabilities, but in most applications they are all 0 or 1.
@@ -999,13 +1021,13 @@
 				\begin{center}
 					\begin{tabular}{|c|}
 					\hline
-						Find $w, \alpha$ that minimizes j = $\sum_{i=1}^{n}(y_{i} ln s(X_{i} \cdot w + \alpha) + (1-y_{i}) ln (1 - s(X_{i} \cdot w + \alpha))$\\
+						Find $w, \alpha$ that minimizes $J = \sum_{i=1}^{n}(y_{i} \ln s(X_{i} \cdot w + \alpha) + (1-y_{i}) \ln (1 - s(X_{i} \cdot w + \alpha))$\\
 						\hline
 					\end{tabular}\\
 					[1em]
 					\includegraphics[scale=0.5]{images/logistics}
 				\end{center}
-			\item $-j(w, \alpha)$ is convex. Solve by gradient ascent.
+			\item $-J(w, \alpha)$ is convex. Solve by gradient ascent.
 			\begin{align*}
 				s'(\gamma) &= \frac{d}{d\gamma} \frac{1}{1 + e^{-\gamma}} = \frac{e^{-\gamma}}{(1 + e^{-\gamma})^{2}}\\
 				&= s(\gamma)(1 - s(\gamma))\\
@@ -1042,13 +1064,13 @@
 			\begin{center}
 				\begin{tabular}{|c|}
 					\hline
-					Find $w$ that minimizes $(Xw - y) \Omega (Xw-y)$\\
+					Find $w$ that minimizes $(Xw - y)^{T} \Omega (Xw-y)$\\
 					\hline
 				\end{tabular}\\
 			\end{center}
 		\item Note,
 			\begin{align*}
-				(Xw - y) \Omega (Xw-y) = \sum_{i=1}^{n} \omega_{i}((Xw)_{i} - y_{i})^{2}\\
+				(Xw - y)^{T}\Omega (Xw-y) = \sum_{i=1}^{n} \omega_{i}((Xw)_{i} - y_{i})^{2}\\
 			\end{align*}
 		\item Sove for $w$ in normal equations:	
 			\begin{align*}
@@ -1066,7 +1088,7 @@
 				\begin{align*}
 					\nabla J(w) = \nabla J(v) + (\nabla^{2}J(v))(w-v) + \mathcal{O}(|w - v|^{2})
 				\end{align*}
-			\item $\nabla^{2}J(v))(w-v)$ is the \underline{Hessian matrix} of $J$ at $v$.
+			\item $\nabla^{2}J(v)(w-v)$ is the \underline{Hessian matrix} of $J$ at $v$.
 			\item Find critical point $w$ by setting $\nabla J(w) = 0$:
 				\begin{align*}
 					w = v - (\nabla^{2}J(v))^{-1}\nabla J(v)
@@ -1138,6 +1160,13 @@
 						\begin{center}
 							\includegraphics[scale=0.5]{images/ROCCurve}
 						\end{center}
+						\begin{itemize}
+							\item Receiver Operating Characteristics 
+							\item A way of telling you information about the test set, not part of the learning algorithm.
+							\item Run classifier on test set, and it shows the rate of false positives vs. true positives for a range of settings.
+							\item x-axis false positive rate = \% of negative samples accidentally classified as positive.
+							\item y-axis true positive rate = \% of positive that actually got classified as positive (aka sensitivity).
+						\end{itemize}
 				\end{itemize}
 				
 				\item[Least-Squares Polynomial Regression]
@@ -1157,6 +1186,363 @@
 					\end{itemize}
 \end{description}
 
+\newpage
+\section*{03/02/2016}
+\begin{description}
+	\item[Statistical Justification for Regression]
+	\
+	\begin{itemize}
+		\item Typical model of reality:
+			\begin{itemize}
+				\item Samples come from unknown probability distribution $X_{i} \sim D$.
+				\item y-values are sum of unknowns, non-random surface plus random noise: for all $X_{i}$,
+					\begin{align*}
+						y_{i} = f(X_{i}) + \epsilon_{i}
+					\end{align*}
+			\end{itemize}
+		\item Goal of regression: find $h$ that estimates f.
+		\item Ideal approach: choose $h(x) = E_{y}[Y | X=x]$
+	\end{itemize} 
+	
+	\item[Least-squares Regression from Max Likelihood]
+	\
+	\begin{itemize}
+		\item Suppose $\epsilon_{i} \sim \mathcal{N}(0, \sigma^{2})$; then $y_{i}|X_{i} \sim \mathcal{N}(f(X_{i}), \sigma^{2})$.
+		\item Recall that log likelihood for normal distribution is,
+			\begin{align*}
+				ln P(y_{i}) &= - \frac{|y_{i} - \mu|^{2}}{2\sigma^{2}} - constant \ \ \ \ \ \ \Leftarrow \mu = f(X_{i})\\
+				ln(P(y_{1})P(y_{2}) \dots P(y_{n})) &= ln P(y_{1}) + ln P(y_{2}) + \dots + ln P(y_{n})\\
+			\end{align*}
+		\item Takeaway: If you apply the principle of max likelihood to linear regression with an input model that assumes gaussian noise $\Rightarrow$ find $f$ by least-squares. 
+	\end{itemize}
+	
+	\item[Empirical Risk]
+	\
+	\begin{itemize}
+		\item The \underline{risk} for hypothesis $h$ is the expected loss $R(h) = E[L]$ over all $X, Y$.
+		\item Discriminative model: we don't know $X'$s distribution D. How can we minimize the risk?
+		\item \underline{Empirical distribution}: A discrete probability that is the sample set, with each sample equally likely.
+		\item \underline{Empirical risk}: expected loss over empirical distribution $\hat{R}(h) = \frac{1}{n} \sum_{i=1}^{n} L(h(X_{i}), y_{i}))$.
+		\item Takeaway: this is why we minimize the sum of loss functions.
+	\end{itemize}
+	
+	\item[Logistic regression from Max Likelihood]
+	\
+	\begin{itemize}
+		\item If we accept the logistic regression function, what cost function should we use?
+		\item Given arbitrary sample $x$, write probability it is in (not in) the class: (fictitious dimension: x ends w/1; $w$ ends w/$\alpha$).
+			\begin{align*}
+				P(y=1|x;w) &= h(x;w) \ \ \ \ \ \ \ \ \Leftarrow h(x;w) = s(w^{T}x)\\
+				P(y=0|x;w) &= 1 - h(x;w)\\
+			\end{align*}
+		\item Combine these 2 facts into 1 expression:
+			\begin{align*}
+				P(y|x;w) = h(x)^{y}(1 - h(x))^{1-y}\\
+			\end{align*}
+		
+		\item Likelihood is,
+			\begin{align*}
+				L(w; x_{1}, \dots, x_{n}) &= \prod_{i=1}^{n} P(y_{i}|X_{i};w)\\
+				l(w) = ln L(w) &= \sum_{i=1}^{n} ln P(y_{i}|X_{i};w)\\
+				&= \sum (y_{i}ln h(X_{i}) + (1-y_{i})ln(1-h(X_{i})))
+			\end{align*}
+		\item which is negated logistic cost function J(w).
+	\end{itemize}
+	
+	\item[The Bias-variance Decomposition]
+	\
+	\begin{itemize}
+		\item There are 2 sources of error in a hypothesis h:
+			\begin{itemize}
+				\item \underline{bias}: error due to inability of hypothesis $h$ to fit $f$ perfectly. e.g. fitting quadratic $f$ with a linear $\ell$.
+				\item \underline{variance}: error due to fitting random noise in data. e.g. we fit linear $f$ with a linear $h$, yes $h \neq f$.
+			\end{itemize}
+		\item Model: generate samples $X_{1} \dots X_{n}$ from some distribution $D$. Values $y_{i} = f(X_{i}) + \epsilon_{i}$. Fit hypothesis $h$ to $X, y$.
+		\item Now $h$ is a random variable; i.e. its weights are random.
+		\item Consider an arbitrary point $z \in \mathbb{R}^{d}$ (not necessarily a sample!) and $\gamma = f(z) + \epsilon$.
+		\item Note: $\text{E}[\gamma] = f(z) ; \text{Var}(\gamma) = \text{Var}(\epsilon)$;
+		\item Risk function when loss is squared error:
+		\item Here we are taking the expectation over all possible training sets $X,y$ and values of $\gamma$.
+			\begin{align*}
+				R(h) &= E[L(h(z), \gamma)]\\
+					&= E[(h(z) - \gamma)^{2}]\\
+					&= E[h(z)^{2}] + E[\gamma^{2}] - 2E[\gamma h(z)]\\
+					&= \text{Var}(h(z)) + E[h(z)]^{2} + \text{Var}(\gamma) + E[\gamma]^{2} - 2E[\gamma]E[h(z)]\\
+					&= (E[h(z)] - E[\gamma])^{2} + \text{Var}(h(z)) + \text{Var}(\gamma)\\
+					&= E[h(z) - f(z)]^{2} + \text{Var}(h(z)) + \text{Var}(\epsilon)\\
+			\end{align*}
+			\begin{itemize}
+				\item We take expectation over possible training sets, $X, y$ and values of $\gamma$.
+				\item $E[h(z) - f(z)]^{2}$: is square of the bias of method.
+				\item $\text{Var}(h(z))$: variance of method.
+				\item $\text{Var}(\epsilon)$: irreducible error (comes from test point not from training).
+			\end{itemize}
+			
+			\item This is point-wise version. Mean version: Let $z \sim D$ be random variable; take expectation of the squares bias, variance over $z$
+				\begin{center}
+					\includegraphics[scale=0.5]{images/noise}
+				\end{center}
+				\begin{itemize}
+					\item Under-fitting: too much bias.
+					\item Over-fitting caused by too much variance. 
+				\end{itemize}
+			\item Training error reflects bias but not variance; test error reflects both.
+			\item For many distributions, variance $\rightarrow$ 0 as $n \rightarrow \infty$.
+			\item If $h$ can fit $f$ exactly, for many distributions bias $\rightarrow 0$ as $n \rightarrow \infty$.
+			\item If $h$ cannot fit $f$ well, bias is large at "most" points.
+			\item Adding a good feature reduces bias; adding a bad feature rarely increases it.
+			\item Adding a feature usually increases variance.
+			\item Cannot reduce irreducible error.
+			\item Noise in test set affects only var($\epsilon$); noise in training set affects only bias and Var(h).
+			\item For real-world data, $f$ is rarely knowable (and noise model might be wrong).
+			\item But we can test learning algorithms by choosing $f$ and making synthetic data.
+				\begin{center}
+					\includegraphics[scale=0.5]{images/errorvsbias}
+				\end{center}
+			\item Example: Least-Squares Linear Regression:
+				\begin{itemize}
+					\item No fictitious dimension.
+					\item Model: $f(z) = v^{T}z$.
+					\item Let $e$ be a noise n-vector $e\sim \mathcal{N}(0, \sigma^{2})$.
+					\item Training values: $y = Xv + e$. Input to regression algorithm are $y, X$.
+					\item Linear regression computes weights:
+						\begin{align*}
+							w = X^{+}y = X^{+}(Xv + e) = v + X^{+}e
+						\end{align*}
+					\item Bias is,
+						\begin{align*}
+							E[h(z) - f(z)] = E[w^{T}z - v^{T}z] = E[z^{T}X^{+}e] = z^{T}X^{+}E[e] = 0
+						\end{align*}
+					\item Warning: This does not mean $h(z) - f(z)$ is everywhere 0. Sometimes positive, sometimes negative, mean over training sets is 0.
+					\item Variance is,
+						\begin{align*}
+							\text{Var}(h(z)) &= \text{Var}(w^{T}z) = \text{Var}(z^{T}w)\\ 
+							&= \text{Var}(z^{T}(v + X^{+}e)\\
+							&= \text{Var}(z^{T}v + z^{T}X^{+}e))\\ 
+							&= \text{Var}(z^{T}X^{+}e)\\
+							&= \sigma^{2} |z^{T}X^{+}|^{2}\\
+							&= \sigma^{2} |z^{T}(X^{T}X)^{-1}X^{T})|^{2}\\
+							&= \sigma^{2} z^{T}(X^{T}X)^{-1}X^{T}X(X^{T}X)^{-1}z\\
+							&= \sigma^{2}z^{T}(X^{+}X)^{-1}z
+						\end{align*}
+					\item If choose coordinate system so $E[X] = 0$ it simplifies to $\approx \sigma^{2}\frac{d}{n}$.
+					\item Takeaways: Bias can be zero when hypothesis function can fit the real one. Variance portion of RSS (overfitting) decreases as $\frac{1}{n}$, increases as $d$.
+				\end{itemize}
+	\end{itemize}
+\end{description}
+
+\newpage
+\section*{03/07/2016}
+\begin{description}
+	\item[Ridge Regression] (aka Tikhonov regularization)
+	\
+	\begin{itemize}
+		\item (1) + (A) + $\ell_{2}$ penalized mean loss (d).
+		\item Optimization problem $J(w)$:
+		\begin{center}
+			\begin{tabular}{|c|}
+				\hline
+				Find $w$ that minimizes
+				$|Xw - y|^{2} + \lambda|w'|^{2}$\\
+				\hline
+			\end{tabular}\\
+		\end{center}
+		Where $w'$ is $w$ with components $\alpha$ replaced by 0. $X$ has fictitious dimension but we DON'T penalize $\alpha$.
+		\item Adds a penalty term to encourage small $|w'|$ -- called \underline{shrinkage}.
+		\item Why? Guaranteed positive definite normal equations; always unique solution. e.g. when $d>n$ always semi-definite.
+			\begin{center}
+				\includegraphics[scale=0.5]{images/ridge}
+			\end{center}
+		\item Reduces over-fitting by reducing variance by penalizing large weights.
+			\begin{center}
+				\includegraphics[scale=0.5]{images/sqrsvslambda}
+			\end{center}
+		\item Setting $\nabla J = 0$ gives equations,
+			\begin{align*}
+				(X^{T}X + \lambda I')w = X^{T}y
+			\end{align*} 
+		\item where $I'$ is identity matrix with bottom right set to zero.
+		\item Algorithm: solve for $w$. Return $h(z) = w^{T}x$.
+		\item Increasing $\lambda \Rightarrow$ more \underline{regularization}; smaller $|w'|$.
+		\item Given our data model $y = Xv + e$, where $e$ is noise.
+		\item Variance of ridge regression is Var($x^{T}(X^{T}X + \lambda I')^{-1}X^{T}e)$.
+		\item As $\lambda \rightarrow \infty$, variance $\rightarrow 0$, but bias increases.
+			\begin{center}
+				\includegraphics[scale=0.5]{images/lambdabiasvsvariance}
+			\end{center}
+		\item $\lambda$ is a hyper-parameter; tune by (cross)-validation.
+		\item Ideally features should be "normalized" to have same variance.
+		\item Alternative: Use asymmetric penalty by replacing $I'$ with other diagonal matrix.
+	\end{itemize} 
+	
+	\item[Bayesian justification for ridge regression]
+	\
+	\begin{itemize}
+		\item Assign a prior probability on $w'$: a Gaussian centered at 0.
+		\item Posterior probability $\approx$ likelihood of $w \cdot $ prior $P(w') \leftarrow$ Gaussian PDF. 
+		\item Maximize the log posterior, $\ell$n likelihood + $\ell n P(w') =$ -const$|Xw-y|^{2}$ - const$|w'|^{2}$ - constant.
+		\item This method (using likelihood, but maximizing posterior) is called \underline{maximum a posteriori} (MAP).
+	\end{itemize}
+	
+	\item[Kernels]
+	\
+	\begin{itemize}
+		\item Recall: with $d$ input features, degree-p polynomials blow up to $\mathcal{O}(d^{p})$ features.
+		\item Today we use magic to use those features without computing them!
+		\item Observation: In many learning algorithms:
+			\begin{itemize}
+				\item The weights can be written as a linear combination of input samples.
+				\item We can use inner products of $\phi(x)'$s only $\Rightarrow$ don't need to compute $\phi(x)$!
+				\item Suppose $w = X^{T}a = \sum_{i=1}^{n} a_{i}X_{i}$ for some $a \in \mathbb{R}^{n}$.
+				\item Substitute this identity into algorithms and optimize $n$ \underline{dual weights} (aka \underline{dual parameters} a, instead of $d+1$ \underline{primal weights} w.
+			\end{itemize}
+	\end{itemize}
+	
+	\item[Kernel Ridge Regression]
+	\
+	\begin{itemize}
+		\item \underline{Center} $X$ and $y$ so their means are zero; $X_{i} \leftarrow X_{i} - \mu_{x}$. By centering the matrix we minimize the penalization of $\alpha$
+		\item This lets us replace $I'$ with $I$ in normal equations:
+			\begin{align*}
+				&(X^{T}X + \lambda I)w = X^{T}y\\
+				&\Rightarrow w = \frac{1}{\lambda}(X^{T}y - X^{T}Xw) = X^{T}a  \ \ \ \ \ \text{where } a = \frac{1}{\lambda}(y-Xw)
+			\end{align*}
+		\item This shows that $w$ is a linear combination of samples. To compute $a$:
+			\begin{align*}
+				\lambda a = (y - XX^{T}a) \Rightarrow a = (XX^{T} + \lambda I)^{-1}y
+			\end{align*}
+		\item $a$ is the \underline{dual solution}; solves the \underline{dual form} of ridge regression:
+		\begin{center}
+			\begin{tabular}{|c|}
+				\hline
+				Find $a$ that minimizes $|XX^{T} - y|^{2} + \lambda|X^{T}a|^{2}$\\
+				\hline
+			\end{tabular}\\
+		\end{center}
+		\item Regression function is:
+			\begin{align*}
+				h(z) = w^{T}z = a^{T}Xz = \sum_{i=1}^{n} a_{i}(X_{i}^{T}z) \Leftarrow \text{weighted sum of inner products}
+			\end{align*}
+		\item Let $k(x, z) = x^{T}z$ be \underline{kernel function}.
+		\item Let $K = XX^{T}$ be nxn \underline{kernel matrix}. Note $K_{ij} = k(X_{i}, X_{j})$.
+		\item $K$ is singular if $n>d$. In that case no solution if $\lambda = 0$.
+		\item Summary of kernel ridge regression:
+			\begin{itemize}
+				\item Solve $(K + \lambda I)a = y$  for a $\Leftarrow \mathcal{O}(n^{3})$ time.
+				\item $K_{ij} = k(X_{i}, X_{j}) \ \forall i,j \Leftarrow \mathcal{O}(n^{2}d)$ time.
+				\item for each test point $z$: $h(z) = \sum_{i=1}^{n} a_{i} k(X_{i}, z) \Leftarrow \mathcal{O}(nd)$ time.
+			\end{itemize}
+		\item Do not use $X$ directly: only $k(\cdot , \cdot)$.
+		\item Dual: solve $n$x$n$ linear system.
+		\item Primal: solve $d$x$d$ linear system.
+	\end{itemize}
+	
+	\item[The Kernel Trick] (aka \underline{kernelization})
+	\
+	\begin{itemize}
+		\item The \underline{polynomial kernel} of degree $p$ is $k(x,z) = (x^{T}z + 1)^{p}$.
+		\item Theorem: $(x^{T}z + 1)^{p} = \phi(x)^{T}\phi(z)$ where $\phi(x)$ contains every monomial in $x$ of degree $0 \dots p$.
+		\item Example for $d=2, p=2$.
+			\begin{align*}
+				(x^{T}z+1)^{2} &= x_{1}^{2}z_{1}^{2} + x_{2}^{2}z_{2}^{2} + 2x_{1}z_{1}x_{2}z_{2} + 2x_{1}z_{1} + 2x_{2}z_{2} + 1\\
+					& = \begin{bmatrix}
+						x_{1}^{2} & x_{2}^{2} & \sqrt{2x_{1}x_{2}} & \sqrt{2x_{1}} & \sqrt{2x_{2}} & 1
+					\end{bmatrix}
+					\cdot
+					\begin{bmatrix}
+						z_{1}^{2}\\
+						z_{2}^{2}\\
+						\sqrt{2z_{1}z_{2}}\\
+						\sqrt{2z_{1}}\\
+						\sqrt{2z_{2}}\\
+						1\\
+					\end{bmatrix}\\
+					&= \phi(x)^{T} \phi(z)\\
+			\end{align*}
+		\item Key win: compute $\phi(x)^{T} \phi(z)$ in $\mathcal{O}(d)$ time instead of $\mathcal{O}(d^{p})$ even though $\phi(x)$ has length $\mathcal{O}(d^{p})$.
+		\item Kernel ridge regression replaces $X_{i}$ with $\phi(X_{i})$:
+			\begin{itemize}
+				\item Let $k(x, z) = \phi(x)^{T}\phi(z)$.	
+			\end{itemize} 
+	\end{itemize}
+\end{description}
+
+\newpage
+\section*{03/09/2016}
+\begin{description}
+	\item[Kernels] continued
+	\begin{itemize}
+		\item \underline{Kernel Perceptrons}
+		\item Note: Everywhere below, we can replace $X_{i}$ with $\phi(X_{i})$
+			\begin{algorithm*}
+			\caption{Perceptron algorithm}
+			\begin{algorithmic}
+			\While {some $y_{i}X_{i} \cdot w < 0$}
+			\State $w \leftarrow w + \epsilon y_{i}x_{i}$
+			\EndWhile
+			\While{still have test points $z$}
+			\State $f(z) \leftarrow w^{T}x$
+			\EndWhile
+			\end{algorithmic}
+			\end{algorithm*}
+		\item Kernelize with $w=X^{T}a$; $X_{i}\cdot w = (XX^{T}a)_{i} = (Ka)_{i}$.
+					\begin{algorithm*}
+			\caption{Dual Perceptron algorithm}
+			\begin{algorithmic}
+			\State $ a = [y_{1}, 0, \dots, 0]^{T}$
+			\State $K_{ij} = K(X_{i}, X_{j}) \ \forall i,j$
+			\While {some $y_{i}(Ka)_{i} \cdot w < 0$}
+			\State $a \leftarrow a + \epsilon y_{i}$
+			\EndWhile
+			\While{still have test points $z$}
+			\State $f(z) \leftarrow \sum_{j=1}^{n} a_{j}K(X_{j},z)$
+			\EndWhile
+			\end{algorithmic}
+			\end{algorithm*}
+		\item Computing $K_{ij} \Leftarrow \mathcal{O}(n^{2}d)$ time (kernel trick).
+		\item Optimization for first while loop: maintain $Ka$, $\mathcal{O}(n)$ time.
+		\item Second loop runs in $\mathcal{O}(nd)$ time or we can compute $w=X^{T}a$ once in $\mathcal{O}(nd')$ time and evaluate test points in $\mathcal{O}(d')$ time per point, where $d'$ is the length of $\phi(\cdot)$.
+	\end{itemize}
+
+	\item[Kernel Logistic Regression]
+	\
+	\begin{itemize}
+		\item Stochastic gradient ascent step:
+			\begin{align*}
+				a_{i} \leftarrow a_{i} + \epsilon(y_{i} - s((Ka)_{i}))\\
+			\end{align*}
+		\item Gradient ascent step:
+			\begin{align*}
+				a \leftarrow a + \epsilon(y_{i} - s((Ka)) \Leftarrow \text{ applying s component-wise to vector } Ka \\
+			\end{align*}	
+		\item for each test point $z$: $h(z) \leftarrow s(\sum_{j=1}^{n} a_{j}k(X_{j}, z))$.
+	\end{itemize}
+	
+	\item[The Gaussian Kernel]
+	\
+	\begin{itemize}
+		\item \underline{Gaussian kernel}, aka \underline{radial basis function kernel}
+		\item There exists a $\phi(x)$ such that:
+			\begin{align*}
+				k(x, z) = e^{(-\frac{|x-z|^{2}}{2\sigma^{2}})}
+			\end{align*}
+		\item Key observation: $h(z) = s(\sum_{j=1}^{n} a_{j}k(X_{j}, z))$ is a linear combination of Gaussian centered at samples.
+		\item Very popular in practice:
+			\begin{itemize}
+				\item Gives very smooth $h$
+				\item Behaves somewhat like k-nearest neighbor, but smoother.
+				\item Oscillates less than polynomial (depending on $\sigma$).
+				\item $k(x,z)$ can be interpreted as a "similarity measure" $y$ value more influenced by points around it.
+				\item Gaussian is maximum when $x=z$, goes to 0 as distance increases.
+				\item Samples "vote" for value at $z$, but closer samples get bigger vote.
+			\end{itemize}
+		\item $\sigma$ trades off bias vs. variance:
+			\begin{itemize}
+				\item larger $\sigma \rightarrow$ wider Gaussians, smoother $h \rightarrow$ more bias, less variance.
+				\item Choose by (cross)-validation.
+			\end{itemize}
+	\end{itemize}
+\end{description}
 \end{document}
 
 

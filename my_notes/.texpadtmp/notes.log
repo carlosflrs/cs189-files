@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  8 MAR 2016 16:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  14 MAR 2016 16:43
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -742,89 +742,110 @@ File: images/gaussiantransformation.png Graphic file (type png)
  <use images/gaussiantransformation.png>
 Package pdftex.def Info: images/gaussiantransformation.png used on input line 742.
 (pdftex.def)             Requested size: 353.82101pt x 269.00433pt.
- [15 <./images/gaussiantransformation.png>] <images/chart.png, id=88, 631.35875pt x 475.7775pt>
-File: images/chart.png Graphic file (type png)
- <use images/chart.png>
-Package pdftex.def Info: images/chart.png used on input line 769.
-(pdftex.def)             Requested size: 315.6786pt x 237.88815pt.
- <images/smaple.png, id=89, 479.7925pt x 298.11375pt>
+ [15 <./images/gaussiantransformation.png>] <images/smaple.png, id=88, 479.7925pt x 298.11375pt>
 File: images/smaple.png Graphic file (type png)
  <use images/smaple.png>
-Package pdftex.def Info: images/smaple.png used on input line 784.
+Package pdftex.def Info: images/smaple.png used on input line 806.
 (pdftex.def)             Requested size: 239.89565pt x 149.0565pt.
- [16 <./images/chart.png> <./images/smaple.png>] <images/LDA.png, id=95, 580.1675pt x 453.695pt>
+ [16 <./images/smaple.png>] <images/LDA.png, id=94, 580.1675pt x 453.695pt>
 File: images/LDA.png Graphic file (type png)
  <use images/LDA.png>
-Package pdftex.def Info: images/LDA.png used on input line 806.
+Package pdftex.def Info: images/LDA.png used on input line 828.
 (pdftex.def)             Requested size: 290.08302pt x 226.84694pt.
 File: images/LDA.png Graphic file (type png)
  <use images/LDA.png>
-Package pdftex.def Info: images/LDA.png used on input line 826.
+Package pdftex.def Info: images/LDA.png used on input line 848.
 (pdftex.def)             Requested size: 290.08302pt x 226.84694pt.
- [17 <./images/LDA.png>] <images/lda_projections.png, id=100, 339.2675pt x 229.85875pt>
+ [17 <./images/LDA.png>] <images/lda_projections.png, id=99, 339.2675pt x 229.85875pt>
 File: images/lda_projections.png Graphic file (type png)
  <use images/lda_projections.png>
-Package pdftex.def Info: images/lda_projections.png used on input line 835.
+Package pdftex.def Info: images/lda_projections.png used on input line 857.
 (pdftex.def)             Requested size: 169.63333pt x 114.92908pt.
- <images/overfitting.png, id=101, 598.235pt x 280.04625pt>
+ <images/overfitting.png, id=100, 598.235pt x 280.04625pt>
 File: images/overfitting.png Graphic file (type png)
  <use images/overfitting.png>
-Package pdftex.def Info: images/overfitting.png used on input line 844.
+Package pdftex.def Info: images/overfitting.png used on input line 866.
 (pdftex.def)             Requested size: 299.11676pt x 140.02277pt.
- [18 <./images/lda_projections.png> <./images/overfitting.png>] <images/leastsquares.png, id=107, 277.035pt x 219.82124pt>
+ [18 <./images/lda_projections.png> <./images/overfitting.png>] <images/leastsquares.png, id=106, 277.035pt x 219.82124pt>
 File: images/leastsquares.png Graphic file (type png)
  <use images/leastsquares.png>
-Package pdftex.def Info: images/leastsquares.png used on input line 916.
+Package pdftex.def Info: images/leastsquares.png used on input line 938.
 (pdftex.def)             Requested size: 138.51715pt x 109.91034pt.
- [19 <./images/leastsquares.png>] <images/yhat.png, id=113, 581.17125pt x 130.4875pt>
+ [19 <./images/leastsquares.png>] <images/yhat.png, id=112, 581.17125pt x 130.4875pt>
 File: images/yhat.png Graphic file (type png)
  <use images/yhat.png>
-Package pdftex.def Info: images/yhat.png used on input line 974.
+Package pdftex.def Info: images/yhat.png used on input line 996.
 (pdftex.def)             Requested size: 290.58492pt x 65.24358pt.
- [20 <./images/yhat.png>] <images/logistics.png, id=118, 650.43pt x 209.78375pt>
+ [20 <./images/yhat.png>] <images/logistics.png, id=117, 650.43pt x 209.78375pt>
 File: images/logistics.png Graphic file (type png)
  <use images/logistics.png>
-Package pdftex.def Info: images/logistics.png used on input line 1006.
+Package pdftex.def Info: images/logistics.png used on input line 1028.
 (pdftex.def)             Requested size: 325.2142pt x 104.8916pt.
- <images/gradients.png, id=119, 528.97626pt x 185.69376pt>
+ <images/gradients.png, id=118, 528.97626pt x 185.69376pt>
 File: images/gradients.png Graphic file (type png)
  <use images/gradients.png>
-Package pdftex.def Info: images/gradients.png used on input line 1014.
+Package pdftex.def Info: images/gradients.png used on input line 1036.
 (pdftex.def)             Requested size: 264.48747pt x 92.84665pt.
- [21 <./images/logistics.png> <./images/gradients.png>] <images/regression.png, id=125, 347.2975pt x 265.99374pt>
+ [21 <./images/logistics.png> <./images/gradients.png>] <images/regression.png, id=124, 347.2975pt x 265.99374pt>
 File: images/regression.png Graphic file (type png)
  <use images/regression.png>
-Package pdftex.def Info: images/regression.png used on input line 1028.
+Package pdftex.def Info: images/regression.png used on input line 1050.
 (pdftex.def)             Requested size: 173.64832pt x 132.99654pt.
- [22 <./images/regression.png>] [23] <images/ldavsregression.png, id=133, 574.145pt x 235.88126pt>
+ [22 <./images/regression.png>] [23] <images/ldavsregression.png, id=132, 574.145pt x 235.88126pt>
 File: images/ldavsregression.png Graphic file (type png)
  <use images/ldavsregression.png>
-Package pdftex.def Info: images/ldavsregression.png used on input line 1131.
+Package pdftex.def Info: images/ldavsregression.png used on input line 1153.
 (pdftex.def)             Requested size: 287.0718pt x 117.94034pt.
- <images/ROCCurve.png, id=134, 610.28pt x 448.67625pt>
+ <images/ROCCurve.png, id=133, 610.28pt x 448.67625pt>
 File: images/ROCCurve.png Graphic file (type png)
  <use images/ROCCurve.png>
-Package pdftex.def Info: images/ROCCurve.png used on input line 1139.
+Package pdftex.def Info: images/ROCCurve.png used on input line 1161.
 (pdftex.def)             Requested size: 305.13925pt x 224.33757pt.
- [24 <./images/ldavsregression.png>] <images/polyregression.png, id=139, 603.25375pt x 431.6125pt>
+ [24 <./images/ldavsregression.png>] <images/polyregression.png, id=138, 603.25375pt x 431.6125pt>
 File: images/polyregression.png Graphic file (type png)
  <use images/polyregression.png>
-Package pdftex.def Info: images/polyregression.png used on input line 1155.
+Package pdftex.def Info: images/polyregression.png used on input line 1184.
 (pdftex.def)             Requested size: 301.62613pt x 215.80571pt.
- [25 <./images/ROCCurve.png> <./images/polyregression.png>] (/Users/carlosflrs/Google Drive/cs189/cs189-files/my_notes/.texpadtmp/notes.aux) ) 
+ [25 <./images/ROCCurve.png> <./images/polyregression.png>] [26] <images/noise.png, id=148, 487.8225pt x 338.26375pt>
+File: images/noise.png Graphic file (type png)
+
+<use images/noise.png>
+Package pdftex.def Info: images/noise.png used on input line 1283.
+(pdftex.def)             Requested size: 243.91064pt x 169.13145pt.
+ [27 <./images/noise.png>] <images/errorvsbias.png, id=153, 674.52pt x 453.695pt>
+File: images/errorvsbias.png Graphic file (type png)
+ <use images/errorvsbias.png>
+Package pdftex.def Info: images/errorvsbias.png used on input line 1300.
+(pdftex.def)             Requested size: 337.25917pt x 226.84694pt.
+ [28 <./images/errorvsbias.png>] [29] <images/ridge.png, id=161, 552.0625pt x 239.89626pt>
+File: images/ridge.png Graphic file (type png)
+ <use images/ridge.png>
+Package pdftex.def Info: images/ridge.png used on input line 1354.
+(pdftex.def)             Requested size: 276.03056pt x 119.94783pt.
+ <images/sqrsvslambda.png, id=162, 330.23375pt x 261.97874pt>
+File: images/sqrsvslambda.png Graphic file (type png)
+ <use images/sqrsvslambda.png>
+Package pdftex.def Info: images/sqrsvslambda.png used on input line 1358.
+(pdftex.def)             Requested size: 165.11646pt x 130.98904pt.
+ <images/lambdabiasvsvariance.png, id=163, 418.56375pt x 244.915pt>
+File: images/lambdabiasvsvariance.png Graphic file (type png)
+ <use images/lambdabiasvsvariance.png>
+Package pdftex.def Info: images/lambdabiasvsvariance.png used on input line 1371.
+(pdftex.def)             Requested size: 209.28136pt x 122.45718pt.
+ [30 <./images/ridge.png> <./images/sqrsvslambda.png>] [31 <./images/lambdabiasvsvariance.png>] [32] [33] [34] (/Users/carlosflrs/Google Drive/cs189/cs189-files/my_notes/.texpadtmp/notes.aux) ) 
 Here is how much of TeX's memory you used:
- 16355 strings out of 493117
- 352873 string characters out of 6135433
+ 16426 strings out of 493117
+ 354216 string characters out of 6135433
  409595 words of memory out of 5000000
- 19476 multiletter control sequences out of 15000+600000
+ 19543 multiletter control sequences out of 15000+600000
  13660 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,17n,80p,407b,1355s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on "/Users/carlosflrs/Google Drive/cs189/cs189-files/my_notes/.texpadtmp/notes.pdf" (25 pages, 3178958 bytes).
+{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on "/Users/carlosflrs/Google Drive/cs189/cs189-files/my_notes/.texpadtmp/notes.pdf" (34 pages, 3577212 bytes).
 PDF statistics:
- 205 PDF objects out of 1000 (max. 8388607)
- 116 compressed objects within 2 object streams
+ 245 PDF objects out of 1000 (max. 8388607)
+ 138 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 118 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 138 words of extra memory for PDF output out of 10000 (max. 10000000)
 
