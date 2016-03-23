@@ -11,6 +11,23 @@
 \oddsidemargin=-0.25in
 \evensidemargin=-0.25in
 
+\usepackage{listings}
+\lstnewenvironment{codeblock}
+    {\lstset{language=Python,
+      showspaces=false,
+      showtabs=false,
+      breaklines=true,
+      mathescape=true,
+      showstringspaces=false,
+      breakatwhitespace=true,
+      commentstyle=\textit,
+      keywordstyle=\textbf,
+      basicstyle=\ttfamily,
+      escapechar=`,
+      moredelim={**[is][{\color{RoyalBlue}}]{\^^M\\beginsol}{\^^M\\endsol}},
+      moredelim={[is][{\color{RoyalBlue}}]{\^^M\\beginexp}{\^^M\\endexp}},
+    }}
+    {}
 
 \begin{document}
 \section*{01/25/2016}
@@ -173,7 +190,7 @@
 			\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\subsection{Perceptron algorithm}
+	\subsection*{Perceptron algorithm}
 		\
 		\begin{itemize}
 			\item (Frank Rosenblatt, 1957) Slow, but correct for linearly separable samples. Uses a \underline{numerical optimization} algorithm: \underline{gradient descent}.
@@ -220,7 +237,7 @@
 \newpage
 \section*{01/27/2016}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-	\subsection{Perceptron algorithm continued}
+	\subsection*{Perceptron algorithm continued}
 	\
 		\begin{itemize}
 			\item \underline{Duality} between x-space and w-space:\\
@@ -245,8 +262,7 @@
 				\end{itemize}
 		\end{itemize}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\subsection{Optimization algorithm 1}: Gradient descent on $R$.
+	\subsection*{Optimization algorithm 1} Gradient descent on $R$.
 		\begin{itemize}
 			\item Given a starting point $w$, find gradient of $R$ with respect to $w$; this is the direction of the steepest ascent. Take a step in the opposite direction.
 				\begin{align*}
@@ -268,38 +284,32 @@
  					& \triangledown R(w) = \sum_{i \in V} \triangledown -y_{i}x_{i} \cdot w = \sum_{i \in V} -y_{i}x_{i}\\
 				\end{align*}
 			\item At any point $w$, we walk downhill in direction of steepest descent; $- \triangledown R$.
-			
-			\begin{algorithm*}
-			\caption{Gradient descent}
-			\begin{algorithmic}
-			\State $w \leftarrow$ arbitrary non-zero starting point (good choice is any $y_{i}x_{i}$)
-			\While {R(w) $>$ 0}
-			\State $V \leftarrow$ the set of indices $i$ for which $y_{i}x_{i} \cdot w < 0$
-			\State $w \leftarrow w + \epsilon \sum_{i \in V} y_{i}x_{i}$
-			\EndWhile
-			\end{algorithmic}
-			\end{algorithm*}
-
+			\end{itemize}
+\begin{codeblock}
+	Gradient Descent:
+	    $w \leftarrow$ arbitrary non-zero starting point (good choice is any $y_{i}x_{i}$)
+	    while ($R(w) > 0$):
+	        $V \leftarrow$ the set of indices $i$ for which $y_{i}x_{i} \cdot w < 0$
+	        $w \leftarrow w + \epsilon \sum_{i \in V} y_{i}x_{i}$
+\end{codeblock}
+			\begin{itemize}
 			\item Here $\epsilon$ is the step size (aka learning rate chosen empirically).
 			
 			\item Problem: Slow! Each step takes $\mathcal{O}(nd)$ time.
 		\end{itemize}
 	
-	\subsection*{Optimization algorithm 2}: Stochastic gradient descent
+	\subsection*{Optimization algorithm 2} Stochastic gradient descent
 		\
 		\begin{itemize}
 			\item Idea: Each step, pick \underline{one} misclassified $x_{i}$; do gradient descent on loss function $L(x_{i} \cdot w, y_{i})$.
 			\item Called perceptron algorithm. Each step takes $\mathcal{O}(d)$ time.
-
-			\begin{algorithm*}
-			\caption{Perceptron algorithm}
-			\begin{algorithmic}
-			\While {some $y_{i}X_{i} < 0$}
-			\State $w \leftarrow w + \epsilon y_{i}x_{i}$
-			\EndWhile
-			\end{algorithmic}
-			\end{algorithm*}
-		
+			\end{itemize}
+\begin{codeblock}
+	Perceptron Algorithm:
+	    while (some $y_{i}X_{i} < 0$):
+		    $w \leftarrow w + \epsilon y_{i}x_{i}$
+\end{codeblock}
+		\begin{itemize}
 		\item What if separating hyperplane doesn't pass through the origin?
 			\begin{itemize}
 				\item Add a fictitious dimension.
@@ -1081,17 +1091,15 @@
 			\item Find critical point $w$ by setting $\nabla J(w) = 0$:
 				\begin{align*}
 					w = v - (\nabla^{2}J(v))^{-1}\nabla J(v)
-				\end{align*} 
-				\begin{algorithm*}
-					\caption{Newton's Method}
-					\begin{algorithmic}
-						\State pick starting point $w$
-						\While {not "converged"}
-						\State $e \leftarrow$ solution to linear system $(\nabla^{2}J(w))e = -\nabla J(w)$
-						\State $w \leftarrow w + e$
-						\EndWhile
-					\end{algorithmic}
-				\end{algorithm*}
+				\end{align*}
+			\end{itemize}
+\begin{codeblock}
+	Newton's Method:
+	    while not "converged":
+	        $e \leftarrow$ solution to linear system $(\nabla^{2}J(w))e = -\nabla J(w)$
+	        $w \leftarrow w + e$
+\end{codeblock}
+			\begin{itemize}
 			\item Warning: Doesn't know difference between min, max or saddle points. Starting point must be "close enough" to desired solution.
 			\item Facts:
 				\begin{itemize}
@@ -1111,16 +1119,15 @@
 					\end{align*}
 				where $\Omega$ is a diagonal matrix with components $s_{i}(1 - s_{i})$.
 				\item $\Omega$ is positive definite for all $w$,so $X^{T}\Omega X$ is positive semidefinite, so $-J(w)$ is convex.
-					\begin{algorithm*}
-					\caption{Newton's Method}
-					\begin{algorithmic}
-						\While {not "converged"}					
-						\State Solve for $e$ in normal equations: $(X^{T}\Omega X)e = X^{T}(y - s)$
-						\State $w \leftarrow w + e$
-						\EndWhile
-					\end{algorithmic}
-				\end{algorithm*}\\
+				\end{itemize}
+\begin{codeblock}
+	Newton's Method:
+	    while not "converged":
+	        Solve for $e$ in normal equations: $(X^{T}\Omega X)e = X^{T}(y - s)$
+	        $w \leftarrow w + e$
+\end{codeblock}
 				Remember $\Omega, s$ are functions of $w$.
+				\begin{itemize}
 				\item An example of "iteratively re-weighted least squares."
 				\item $\Omega$ prioritizes samples with $s_{i}$ near 0.5; tunes out samples that are near 0/1.
 				\item Idea: If n very large, save time by using a random subsample of the samples per iteration. Increase sample size as you go.
@@ -1328,7 +1335,7 @@
 			\begin{tabular}{|c|}
 				\hline
 				Find $w$ that minimizes
-				$|Xw - y|^{2} + \lambda|w'|^{2}$\\
+				$|Xw - y|^{2} + \lambda||w'||^{2}$\\
 				\hline
 			\end{tabular}\\
 		\end{center}
@@ -1458,31 +1465,29 @@
 	\begin{itemize}
 		\item \underline{Kernel Perceptrons}
 		\item Note: Everywhere below, we can replace $X_{i}$ with $\phi(X_{i})$
-			\begin{algorithm*}
-			\caption{Perceptron algorithm}
-			\begin{algorithmic}
-			\While {some $y_{i}X_{i} \cdot w < 0$}
-			\State $w \leftarrow w + \epsilon y_{i}x_{i}$
-			\EndWhile
-			\While{still have test points $z$}
-			\State $f(z) \leftarrow w^{T}x$
-			\EndWhile
-			\end{algorithmic}
-			\end{algorithm*}
+		\end{itemize}
+
+\begin{codeblock}
+	Perceptron Algorithm:
+	    while (some $y_{i}X_{i} \cdot w < 0$):
+	        $w \leftarrow w + \epsilon y_{i}x_{i}$
+	    while (still have test points $z$):
+	        $f(z) \leftarrow w^{T}x$
+\end{codeblock}
+		\begin{itemize}
 		\item Kernelize with $w=X^{T}a$; $X_{i}\cdot w = (XX^{T}a)_{i} = (Ka)_{i}$.
-					\begin{algorithm*}
-			\caption{Dual Perceptron algorithm}
-			\begin{algorithmic}
-			\State $ a = [y_{1}, 0, \dots, 0]^{T}$
-			\State $K_{ij} = K(X_{i}, X_{j}) \ \forall i,j$
-			\While {some $y_{i}(Ka)_{i} \cdot w < 0$}
-			\State $a \leftarrow a + \epsilon y_{i}$
-			\EndWhile
-			\While{still have test points $z$}
-			\State $f(z) \leftarrow \sum_{j=1}^{n} a_{j}K(X_{j},z)$
-			\EndWhile
-			\end{algorithmic}
-			\end{algorithm*}
+		\end{itemize}
+
+\begin{codeblock}
+	Dual Perceptron Algorithm:
+	    $a = [y_{1}, 0, \dots, 0]^{T}$
+	    $K_{ij} = K(X_{i}, X_{j}) \ \forall i,j$
+	    while (some $y_{i}(Ka)_{i} \cdot w < 0$):
+	        $a \leftarrow a + \epsilon y_{i}$
+	    while (still have test points $z$):
+	        $f(z) \leftarrow \sum_{j=1}^{n} a_{j}K(X_{j},z)$
+\end{codeblock}
+		\begin{itemize}
 		\item Computing $K_{ij} \Leftarrow \mathcal{O}(n^{2}d)$ time (kernel trick).
 		\item Optimization for first while loop: maintain $Ka$, $\mathcal{O}(n)$ time.
 		\item Second loop runs in $\mathcal{O}(nd)$ time or we can compute $w=X^{T}a$ once in $\mathcal{O}(nd')$ time and evaluate test points in $\mathcal{O}(d')$ time per point, where $d'$ is the length of $\phi(\cdot)$.
@@ -1526,5 +1531,163 @@
 				\item Choose by (cross)-validation.
 			\end{itemize}
 	\end{itemize}
+	
+	\subsection*{Subset Selection}
+	\begin{itemize}
+		\item All features increase variance, but not all features reduce bias.
+		\item Idea: Identify poorly predictive features, ignore them (weight zero). Less over-fitting, lower test errors.
+		\item 2nd motivation: Inference. Simpler models convey interpretable wisdom. Useful in all classification and regression methods. Sometimes it's hard: Different feature can partly encode some info. Combinatorially hard to choose best feature subset.
+		\item Algorithm: Best subset selection. Try all $2^{d} - 1$ nonempty subsets of features. Choose the best model by cross-validation. This is very slow!
+		\item Heuristic: \underline{Forward stepwise selection}.
+		\begin{itemize}
+			\item Start with \underline{null model} (0 features); repeatedly add best feature. Repeat until test errors start increasing (due to over-fitting).
+			\item Requires training $\mathcal{O}(d^{2})$ models instead of $\mathcal{O}(2^{d})$.
+			\item Not perfect.
+		\end{itemize}
+		\item Heuristic: \underline{Backward stepwise selection}.
+		\begin{itemize}
+			\item Start with all $d$ features; repeatedly remove feature whose removal gives best reduction in test error.
+			\item Also trains $\mathcal{O}(d^{2})$ models.
+		\end{itemize}
+		\item If you think there's only a few good features do forward, if you think most features will be good do backwards.
+	\end{itemize}
+	
+	\subsection*{Lasso (Tibsharani, 1996)}
+	\begin{itemize}
+		\item Regression with regularization: (1) + (A) + $\ell_{1}$ penalized mean loss (e) "Least absolute shrinkage and selection operator"
+		\item Optimization problem:
+		\begin{center}
+			\begin{tabular}{|c|}
+				\hline
+				Find $w$ that minimizes $|Xw-y|^{2} + \lambda|w'|_{1}$\\
+				\hline
+			\end{tabular}\\
+		\end{center}
+		where $|w'|_{1} = \sum_{i=1}^{n}|w_{i}|$.
+		\item Recall ridge regression: isosurfaces of $|w'|_{2}^{2}$ are hyperspheres. 
+		\item The isosurfaces of $|w'|_{1}$ are \underline{cross-polytopes}.
+		\item The unit cross-polytope is the convex hull of all the positive and negative unit coordinate vectors.
+		\begin{center}
+			\includegraphics[scale=0.6]{images/lassol1}
+			\includegraphics[scale=0.6]{images/standarizesweights}
+		\end{center}
+		
+		\item Algorithms to optimize: subgradient descent, least-angle regression (LARS), forward stagewise.
+	\end{itemize}
+	
+\newpage
+\section*{03/14/2016}
+\subsection*{Decision Trees}
+	\begin{itemize}
+		\item Non-linear method for classification.
+		\item Uses trees with two node types:
+			\begin{itemize}
+				\item internal nodes test feature values (usually just one) and branch accordingly.
+				\item leaf nodes specify class $h(x)$.	
+				\begin{center}
+					\includegraphics[scale=0.6]{images/tree:graph}
+				\end{center}
+			\end{itemize}
+		\item Cuts x-space into rectangular cells.
+		\item Works well with both categorical and quantitative features.
+		\item Interpretable result (inference).
+		\item Decision boundary can be arbitrarily complicated.
+			\begin{itemize}
+				\item Can really reduce bias if boundary is truly complicated.
+				\item A lot of opportunity for over-fitting.
+				\begin{center}
+					\includegraphics[scale=0.8]{images/decisiontreeexamples}
+				\end{center}
+			\end{itemize}
+		\item Leaf is pure if every training sample in it has the same class.
+		\item Consider classification first: Greedy, top-down learning heuristic: 
+		\item Let $S \subseteq \{1, 2, \dots, n\}$ be a list of sample indices.
+		\item Top level call: $S = \{1, 2, \dots, n\}$
+		\end{itemize}
+\begin{codeblock}
+	GrowTree($S$):
+	    if ($y_{i} = c \ \forall i \in S$ and some class C):
+	        return new leaf(C)
+	    else:
+	        choose best splitting feature $j$ and splitting point $\beta$ (*)
+	        $S_{\ell} = \{i : X_{ij} < \beta \}$
+	        $S_{r} = \{ : X_{ij} \geq \beta \}$
+	        return new node($j, \beta, $GrowTree$(S_{\ell}), $GrowTree$(S_{r}))$
+\end{codeblock}
+	\begin{itemize}
+		\item (*) How to choose best split?
+			\begin{itemize}
+				\item Try all splits.
+				\item For a set $S$, let $J(S)$ be the \underline{cost} of $S$.
+				\item Choose the split that minimizes $J(S_{\ell}) + J(S_{r})$; or, the split that minimizes the weighted average $\frac{|S_{\ell}|J(S_{\ell})+ |S_{r}|J(S_{r})}{|S_{\ell}| + |S_{r}|}$
+			\end{itemize}
+		\item How to choose cost $J(S)$?
+			\begin{itemize}
+				\item Idea 1 (bad): Label $S$ with the class $C$ that labels the most samples in $S$. $J(S) \leftarrow$ number of samples in $S$ not in class $C$.
+				\begin{center}
+					\includegraphics[scale=0.6]{images/idea1good}
+				\end{center}
+				\begin{itemize}
+					\item Problem: sometimes we make "progress," yet $J(S_{\ell}) + J(S_{r}) = J(S)$.
+				\begin{center}
+					\includegraphics[scale=0.6]{images/idea1bad}
+				\end{center}
+				\end{itemize}
+				\item Idea 2 (good): Measure \underline{entropy}.
+				\begin{itemize}
+					\item Let $Y$ be a random class variable, and suppose $P(Y=C) = p_{c}$.
+					\item The \underline{surprise} of $Y$ being class $C$ is $S(Y=C) = -log_{2} \ p_{c}$.
+						\begin{itemize}
+							\item event with probability 1 gives us zero surprise.
+							\item event with probability 0 gives us infinite surprise.
+						\end{itemize}
+					\item The \underline{entropy} of an index set $S$ is the average surprise: $H(S) = -\sum_{c} p_{c} \ log_{2} \ p_{c}$, where $p_{c} = \frac{|\{i \in S : y_{i} = C\}|}{|S|}$
+					\item If all samples in $S$ belong to same class? $H(S) = -1 \ log_{2} \ 1 = 0$.
+					\item Half class $C$, half class $D$? $H(S) = -\frac{1}{2} \ log_{2} \frac{1}{2} - \frac{1}{2} \ log_{2} \frac{1}{2} = 1$.
+					\item n samples, all different classes? $H(S) = -log_{2} \ \frac{1}{n} = log_{2} \ n$.
+					\begin{center}
+						\includegraphics[scale=0.7]{images/entropy}
+					\end{center}
+				\end{itemize}
+				
+			\item Weighted average entropy after split is $H_{after} = \frac{|S_{\ell}|H(S_{\ell})+ |S_{r}|H(S_{r})}{|S_{\ell}| + |S_{r}|}$
+			\item Choose split that maximizes \underline{information gain} $H(S) - H_{after}$.
+			\begin{center}
+				\includegraphics[scale=0.6]{images/informationgain}
+			\end{center}
+			\item Information gain always positive expect when one child is empty or \\ $\ \forall C, P(y_{i} = C|i \in S_{\ell}) = P(y_{i}=C|i \in S_{r})$ 
+			\begin{center}
+				\includegraphics[scale=0.7]{images/idea1vsidea2}
+			\end{center}
+			\end{itemize}
+		\item More on choosing a split.
+			\begin{itemize}
+				\item For binary feature $x_{i}$, children are $x_{i}=0$ and $x_{i}  =1$.
+				\item If $x_{i}$ has 3+ discrete values, split depends on application.
+				\item If $x_{i}$ is quantitative, sort samples in $S$ by feature $x_{i}$; remove duplicates try splitting between each pari of consecutive samples.
+				\item Clever Bit: As you scan sorted list from left to right, you can update entropy in $\mathcal{O}(1)$ time per sample!
+				\begin{center}
+					\includegraphics[scale=0.6]{images/binarysplits}
+				\end{center}
+			\end{itemize}
+		\item Algorithms and running times:
+			\begin{itemize}
+				\item Test point: walk down tree until leaf. Return it's label.
+				\begin{itemize}
+					\item Worst-case time is $\mathcal{O}(\text{depth tree})$.
+					\item For binary features, that's $\leq d$.
+					\item Usually (not always) $\leq \mathcal{O}(\log n)$.
+				\end{itemize}
+				\item Training:
+				\begin{itemize}
+					\item For binary features, try $\mathcal{O}(d)$ splits at each node.
+					\item For quantitative features, try $\mathcal{O}(n'd)$ splits; $n' =$ samples in node.
+					\item Either way, $\Rightarrow \mathcal{O}(n'd)$ time at this node.
+				\end{itemize}
+				\item Each sample participates in $\mathcal{O}(\text{depth})$ nodes, cost $\mathcal{O}(d)$ time in each node.
+				\item Running time $\leq \mathcal{O}(dn \text{depth})$.
+			\end{itemize}
+	\end{itemize}
+	
 
 \end{document}
