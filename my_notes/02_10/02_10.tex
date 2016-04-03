@@ -1,0 +1,171 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,textcomp,amssymb,geometry,graphicx,enumerate,tikz,algorithm,algpseudocode,pifont}
+\usetikzlibrary{calc}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+
+
+\textheight=9in
+\textwidth=7in
+\topmargin=-.75in
+\oddsidemargin=-0.25in
+\evensidemargin=-0.25in
+
+\usepackage{listings}
+\lstnewenvironment{codeblock}
+    {\lstset{language=Python,
+      showspaces=false,
+      showtabs=false,
+      breaklines=true,
+      mathescape=true,
+      showstringspaces=false,
+      breakatwhitespace=true,
+      commentstyle=\textit,
+      keywordstyle=\textbf,
+      basicstyle=\ttfamily,
+      escapechar=`,
+      moredelim={**[is][{\color{RoyalBlue}}]{\^^M\\beginsol}{\^^M\\endsol}},
+      moredelim={[is][{\color{RoyalBlue}}]{\^^M\\beginexp}{\^^M\\endexp}},
+    }}
+    {}
+
+
+\begin{document}
+\section*{02/10/2016}
+	\subsection*{Gaussian Discriminant Analysis}
+		\
+		\begin{itemize}
+			\item Fundamental assumption: each class comes from a normal distribution (Gaussian).
+				\begin{align*}
+					X \sim \mathcal{N}(\mu, \sigma^{2}):
+					P(X) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{|x-\mu|^{2}}{2\sigma^{2}}}\\ 
+				\end{align*}
+			\item For each class c, suppose we estimate mean $\mu_{c}$, variance $\sigma_{c}^{2}$, and prior $\pi_{c} = P(Y=c)$.
+			\item Given $x$, Bayes' rule $r^{*}(x)$ return class C that maximizes $P(X=x|Y=c)\pi_{c}$.
+			\item $\ln z$ is monotonically increasing for $z > 0$, so its equivalent to maximize,
+				\begin{align*}
+					Q_{c}(x) &= \ln(\sqrt{2\pi}P(X=c|Y=c)\pi_{c})\\
+							&= -\frac{|x-\mu_{c}|^{2}}{2\sigma^{2}} - \ln \sigma_{c} + \ln \pi_{c}\\
+				\end{align*}
+			\item $Q_{c}(x)$ is quadratic in $x$.
+		\end{itemize}
+	
+	\subsection*{Quadratic Discriminant Analysis (QDA)}
+		\
+		\begin{itemize}
+			\item Suppose only 2 classes c, d, Then,
+				\[
+ 				r^{*}(x) = \left\{\def\arraystretch{1.2}%
+ 					\begin{array}{@{}c@{\quad}l@{}}
+    					c & \text{if $Q_{c}(x) - Q_{d}(x) > 0$}\\
+   						d & \text{otherwise}\\
+					\end{array}\right.
+				\]
+			\item The $Q_{c}(x) - Q_{d}(x)$ prediction function is quadratic in $x$.
+			\item Bayes decision boundary is $Q_{c}(x) - Q_{d}(x) = 0$.
+			\item In 1D, Bayesian decision boundary may have 1 or 2 points.
+			\item In d-D, Bayesian decision boundary is a quadric. 
+			\item To recover posterior probabilities in 2-class case, use Bayes:
+				\begin{align*}
+					P(Y=c|X) = \frac{P(X|Y=c)\pi_{c}}{P(X|Y=c)\pi_{c} + P(X|Y=d)\pi_{d}}
+				\end{align*}
+			\item Recall $e^{Q_{c}(x)} = \sqrt{2\pi}P(x)\pi_{c}$.
+				\begin{align*}
+					P(Y=c|X=x) &= \frac{e^{Q_{c}(x)}}{e^{Q_{c}(x)} + e^{Q_{d}(x)}}\\
+					&= \frac{1}{1 + e^{Q_{c}(x) - Q_{d}(x)}}\\
+					&= s(Q_{c}(x) - Q_{d}(x))
+				\end{align*}
+			\item Where s($\cdot$) is the \underline{logistic function} aka \underline{sigmoid function}, 
+				\begin{align*}
+					s(\gamma) = \frac{1}{1 + e^{-\gamma}}\\
+				\end{align*}
+				\begin{itemize}
+					\item Monotonically increasing.\\
+					\item $s(0) = \frac{1}{2}$.\\
+					\item $s(\infty) \rightarrow 1$.\\
+					\item $s(-\infty) \rightarrow -1$.\\
+					\item always $\in [0, 1] \rightarrow$ probabilities.
+				\end{itemize}
+		\end{itemize}
+		
+	\subsection*{Linear Discriminant Analysis (LDA)}
+		\
+		\begin{itemize}
+			\item Fundamental assumption: all the Gaussians have the same variance $\sigma$ only difference between classes is the mean $\mu_{i}$.
+			\item Then,
+				\begin{align*}
+					Q_{c}(x) - Q_{d}(x) = \frac{(\mu_{c}-\mu_{d})\cdot x}{\sigma^{2}} - \frac{\mu_{c}^{2}-\mu_{d}^{2}}{2\sigma^{2}} + \ln \pi_{c} + \ln \pi_{d}\\
+				\end{align*}
+			\item Now its a linear classifiers! Choose c that maximizes,
+				\begin{align*}
+					\frac{\mu_{c}\cdot x}{\sigma^{2}} - \frac{\mu_{c}^{2}}{2\sigma^{2}} + \ln \pi_{c}\\
+				\end{align*}
+			\item In 2-class case, decision boundary is $w \cdot x + \alpha = 0$.
+			\item If $\pi_{c} = \pi_{d} = \frac{1}{2} \implies (\mu_{c} - \mu_{d})\cdot x - \frac{(\mu_{c}-\mu_{d})}{2} = 0$
+			\item This is the centroid method!
+			\item In 2-class case, Bayes posterior is $P(Y=c|X=x) = s(w\cdot x + \alpha)$
+		\end{itemize}
+	
+	\subsection*{Maximum Likelihood Estimation of Parameters} (Ronald Fisher, circa 1912)
+		\
+		\begin{itemize}
+			\item Lets flip biased coins. Heads with probability $p$; tails with probability $1-p$.
+			\item 10 flips, 8 heads, 2 tails. What is the most likely value of $p$?
+			\item Binomial Distribution: $X \sim B(n, p)$
+				\begin{align*}
+					P[X=x] = {n \choose x} p^{x}(1-p)^{n-x}\\
+				\end{align*}
+			\item Our example: n=10,
+				\begin{align*}
+					P[X=10] = 45 p^{8}(1-p)^{2} = \mathcal{L}(x)\\
+				\end{align*}
+			\item Probability of 8 heads in 10 flips: written as a function $\mathcal{L}(p)$ of distribution parameter(s); this is the \underline{likelihood function}
+			\item \underline{Maximum likelihood estimation} (MLE): A method of estimating parameters of a statistical model by picking the parameters that maximize the likelihood function.
+				\begin{center}
+					\begin{tabular}{| c |}
+						\hline
+ 					Find $p$ that maximizes $\mathcal{L}(p)$\\
+ 					\hline
+					\end{tabular}
+				\end{center}
+			\item Solve this example by setting derivative equal to 0:
+				\begin{align*}
+					\frac{d\mathcal{L}}{dp} &= 360p^{7}(1-p)^{2} - 90p^{8}(1-p) = 0\\
+						&\implies 4(1-p)-p = 0 \implies p=0.8\\
+				\end{align*}
+			\item The \underline{log likelihood} $\mathcal{L}(\cdot)$ is the $\ln$ of the likelihood $\mathcal{L}(\cdot)$.
+		\end{itemize}
+	
+	\subsection*{Likelihood of a Gaussian}
+		\
+		\begin{itemize}
+			\item Given samples $x_{1}, x_{2}, \dots, x_{n}$ find best-fit Gaussian.
+			\item Likelihood of generating these samples is,
+				\begin{align*}
+					\mathcal{L}(\mu, \sigma;x_{1}, \dots, x_{n}) = P(x_{1})P(x_{2}) \dots P(x_{n})\\
+				\end{align*}
+			\item Log likelihood is,
+				\begin{align*}
+					l(\mu, \sigma) = \sum_{i=1}^{n} \ln P(x_{i})
+				\end{align*}
+			\item Want to set $\triangledown_{\mu} l = 0$, and  $\frac{\partial l}{\partial \sigma} = 0$.
+			\item Natural log of Gaussian distribution,
+				\begin{align*}
+					\ln P(x) = -\frac{|x-\mu|^{2}}{2\sigma^{2}} - \ln \sqrt{2\pi} - \ln \sigma\\
+				\end{align*}
+			\item taking the gradient,
+				\begin{align*}
+					\triangledown_{\mu}l = \sum_{i} \frac{x_{i}-\mu}{\sigma^{2}} &\implies \hat{\mu} = \frac{1}{n} \sum_{i} x_{i}\\
+					\frac{\partial l}{\partial \sigma} = \sum_{i} \frac{|x_{i} - \mu|^{2} - \sigma^{2}}{\sigma^{3}} = 0 &\implies \hat{\sigma^{2}} = \frac{1}{n} \sum_{i} |x_{i} - \mu|^{2}\\
+				\end{align*}
+			\item We don't know $\mu$ exactly, so substitute $\hat{\mu}$ in the last equation above.
+			\item For QDA: estimate mean and variance of each class as above, and estimate the priors (for each class c):
+				\begin{align*}
+					\hat{\pi_{c}} = \frac{n_{c}}{\sum_{d} n_{d}} \leftarrow \ \text{denominator is the sum of samples in all classes}
+				\end{align*}
+			\item For LDA: same mean and priors; one variance for all classes:
+				\begin{align*}
+					\hat{\sigma^{2}} = \frac{1}{n} \sum_{c} \sum_{i:y_{i}=c} |x_{i} - \mu_{c}|^{2}
+				\end{align*}
+		\end{itemize}
+\end{document}

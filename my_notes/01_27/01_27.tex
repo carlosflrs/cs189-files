@@ -1,0 +1,162 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath,textcomp,amssymb,geometry,graphicx,enumerate,tikz,algorithm,algpseudocode,pifont}
+\usetikzlibrary{calc}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+
+
+\textheight=9in
+\textwidth=7in
+\topmargin=-.75in
+\oddsidemargin=-0.25in
+\evensidemargin=-0.25in
+
+\usepackage{listings}
+\lstnewenvironment{codeblock}
+    {\lstset{language=Python,
+      showspaces=false,
+      showtabs=false,
+      breaklines=true,
+      mathescape=true,
+      showstringspaces=false,
+      breakatwhitespace=true,
+      commentstyle=\textit,
+      keywordstyle=\textbf,
+      basicstyle=\ttfamily,
+      escapechar=`,
+      moredelim={**[is][{\color{RoyalBlue}}]{\^^M\\beginsol}{\^^M\\endsol}},
+      moredelim={[is][{\color{RoyalBlue}}]{\^^M\\beginexp}{\^^M\\endexp}},
+    }}
+    {}
+    
+\begin{document}
+\section*{01/27/2016}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\subsection*{Perceptron algorithm continued}
+	\
+		\begin{itemize}
+			\item \underline{Duality} between x-space and w-space:\\
+				\begin{center}
+					\begin{tabular}{ c|c}
+  						x-space (primal) & w-space (dual) \\
+  						\hline
+  						hyperplan	e: $\{y: w \cdot y = 0\}$ & point: w \\
+  						\hline
+					\end{tabular}
+				\end{center}
+				\begin{itemize}
+					\item If a point $x \in H$ (hyperplane), then its dual hyperplane $x^{*}$ contains the dual point $H^{*}$ (it also preserves orientation).
+				\end{itemize}
+			
+			\item If we want to enforce inequality $x \cdot w \geq 0$, that means:
+				\begin{itemize}
+					\item $x$ should be in the correct side of $\{y: y \cdot w = 0\}$ in x-space.
+					\item $w$ should be on the correct side of $\{v: x \cdot v = 0\}$ in w-space.
+					\item Add image
+					\item Note: if data is linearly separable there will always be a section where you can put $w$.
+				\end{itemize}
+		\end{itemize}
+
+	\subsection*{Optimization algorithm 1} Gradient descent on $R$.
+		\begin{itemize}
+			\item Given a starting point $w$, find gradient of $R$ with respect to $w$; this is the direction of the steepest ascent. Take a step in the opposite direction.
+				\begin{align*}
+					& \triangledown R(w) =
+						\begin{bmatrix}
+ 							\frac{\partial R}{\partial w_{1}}\\
+ 							\frac{\partial R}{\partial w_{2}} \\
+ 							\vdots \\
+ 							\frac{\partial R}{\partial w_{d}}
+ 						\end{bmatrix}
+ 					\ \ \ \ \text{and} \ \ \ \
+ 					\triangledown(z \cdot w) =
+						\begin{bmatrix}
+ 							z_{1} \\
+ 							z_{2} \\
+ 							\vdots \\
+ 							z_{d}
+ 						\end{bmatrix} = z\\
+ 					& \triangledown R(w) = \sum_{i \in V} \triangledown -y_{i}x_{i} \cdot w = \sum_{i \in V} -y_{i}x_{i}\\
+				\end{align*}
+			\item At any point $w$, we walk downhill in direction of steepest descent; $- \triangledown R$.
+			\end{itemize}
+\begin{codeblock}
+	Gradient Descent:
+	    $w \leftarrow$ arbitrary non-zero starting point (good choice is any $y_{i}x_{i}$)
+	    while ($R(w) > 0$):
+	        $V \leftarrow$ the set of indices $i$ for which $y_{i}x_{i} \cdot w < 0$
+	        $w \leftarrow w + \epsilon \sum_{i \in V} y_{i}x_{i}$
+\end{codeblock}
+			\begin{itemize}
+			\item Here $\epsilon$ is the step size (aka learning rate chosen empirically).
+			
+			\item Problem: Slow! Each step takes $\mathcal{O}(nd)$ time.
+		\end{itemize}
+	
+	\subsection*{Optimization algorithm 2} Stochastic gradient descent
+		\
+		\begin{itemize}
+			\item Idea: Each step, pick \underline{one} misclassified $x_{i}$; do gradient descent on loss function $L(x_{i} \cdot w, y_{i})$.
+			\item Called perceptron algorithm. Each step takes $\mathcal{O}(d)$ time.
+			\end{itemize}
+\begin{codeblock}
+	Perceptron Algorithm:
+	    while (some $y_{i}X_{i} < 0$):
+		    $w \leftarrow w + \epsilon y_{i}x_{i}$
+\end{codeblock}
+		\begin{itemize}
+		\item What if separating hyperplane doesn't pass through the origin?
+			\begin{itemize}
+				\item Add a fictitious dimension.
+				\item Hyperplane: $w \cdot x + \alpha = 0$,
+					$$
+						\begin{bmatrix} w_{1} & w_{2} & \dots & w_{d} & \alpha \end{bmatrix}
+						\begin{bmatrix}
+ 							x_{1} \\
+ 							x_{2} \\
+ 							\vdots \\
+ 							x_{d}	\\
+ 							1
+ 						\end{bmatrix}
+					$$
+				\item Now we have samples in $\mathbb{R}^{d+1}$, all lying on plane $X_{d+1} = 1$.
+			\end{itemize}
+		
+		\item Perceptron Convergence Theorem: If data is linearly separable, perceptron algorithm finds a correct linear classifier in at most $\mathcal{O}(\frac{R^{2}}{\gamma^{2}})$ iterations; where $R = \max |X_{i}|$ is the "radius of data" and $\gamma$ is the "margin"  (length of longest feature vector).
+		\end{itemize}
+		
+	\subsection*{Maximum Margin Classifiers}
+		\
+		\begin{itemize}
+			\item The margin of a linear classifier is the distance from the decision boundry to the nearest sample.
+			\item Lets make the margin as big as possible.
+				\begin{center}
+					\begin{tikzpicture}
+					\datavisualization [school book axes,
+                    	visualize as smooth line,
+                   		y axis={},
+                   		x axis={label}]
+						data [format=function] {
+      					var x : interval [-3:3] samples 2;
+      					func y = \value x*-1;
+      					};
+      					data [format=function] {
+      					var x : interval [-3:3] samples 2;
+      					func y = \value x*-1 + 2;
+     					};
+					\end{tikzpicture}
+				\end{center}
+			\item We enforce constraints $y_{i}(w \cdot x_{i} + \alpha) \geq 1 \ \ \forall i \in [1, n]$.
+			\item If $||w|| = 1$, constraints imply the margin is at least 1.
+			\item But we allow to have any length, so the margin is at least $\frac{1}{||w||}$.
+			\item There is a \underline{slab} of width $\frac{2}{||w||}$ that contains no samples.
+			\item To maximize the margin, minimize $||w||$.
+			\item Optimization Problem:
+				\begin{center}
+					Find $w$ and $\alpha$ that maximize $||w||^{2}$ subject to $y_{i}(w \cdot x_{i} + \alpha) \geq 1 \ \ \forall i \in [1, n]$.
+				\end{center}
+			\item This is called a \underline{quadratic program} in $d+1$ dimensions and $n$ constraints.
+			\item It has one unique solution!
+			\item The solution gives us a \underline{maximum margin classifier}, aka a \underline{hard margin support vector machine} (SVM).
+		\end{itemize}
+\end{document}

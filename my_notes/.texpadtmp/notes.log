@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  22 MAR 2016 22:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  2 APR 2016 17:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -467,7 +467,7 @@ File: tikzlibrarybackgrounds.code.tex 2013/07/18 v3.0.0 (rcs-revision 1.3)
 File: tikzlibrarydatavisualization.formats.functions.code.tex 2008/12/09 v3.0.0 (rcs-revision 1.1)
  (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/datavisualization/pgflibrarydatavisualization.formats.functions.code.tex
 File: pgflibrarydatavisualization.formats.functions.code.tex 2011/03/14 v3.0.0 (rcs-revision 1.4)
-)) (/usr/local/texlive/2014/texmf-dist/tex/latex/listings/listings.sty
+)) (/Users/carlosflrs/Google Drive/CS61B/course-materials-sp16/discussion/tex/latex/listings.sty
 \lst@mode=\count136
 \lst@gtempboxa=\box43
 \lst@token=\toks38
@@ -480,15 +480,15 @@ File: pgflibrarydatavisualization.formats.functions.code.tex 2011/03/14 v3.0.0 (
 \lst@newlines=\count140
 \lst@lineno=\count141
 \lst@maxwidth=\dimen171
- (/usr/local/texlive/2014/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2014/03/04 1.5c (Carsten Heinz)
+ (/Users/carlosflrs/Google Drive/CS61B/course-materials-sp16/discussion/tex/latex/lstmisc.sty
+File: lstmisc.sty 2014/09/06 1.5e (Carsten Heinz)
 \c@lstnumber=\count142
 \lst@skipnumbers=\count143
 \lst@framebox=\box44
 ) (/usr/local/texlive/2014/texmf-dist/tex/latex/listings/listings.cfg
 File: listings.cfg 2014/03/04 1.5c listings configuration
 ))
-Package: listings 2014/03/04 1.5c (Carsten Heinz)
+Package: listings 2014/09/06 1.5e (Carsten Heinz)
  (/Users/carlosflrs/Google Drive/cs189/cs189-files/my_notes/.texpadtmp/notes.aux)
 \openout1 = `notes.aux'.
 
@@ -592,352 +592,29 @@ Package grfext Info: Graphics extension search list:
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 )) ABD: EveryShipout initializing macros
 \c@lstlisting=\count150
-LaTeX Font Info:    Try loading font information for U+msa on input line 38.
+LaTeX Font Info:    Try loading font information for U+msa on input line 36.
  (/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 38.
+LaTeX Font Info:    Try loading font information for U+msb on input line 36.
  (/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 243--244
-
- []
-
-(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2014/03/04 1.5c listings language file
-)
-LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 290.
- [4]
-Missing character: There is no d in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no t in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no [ in font nullfont!
-Missing character: There is no f in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no r in font nullfont!
-Missing character: There is no m in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no t in font nullfont!
-Missing character: There is no = in font nullfont!
-Missing character: There is no f in font nullfont!
-Missing character: There is no u in font nullfont!
-Missing character: There is no n in font nullfont!
-Missing character: There is no c in font nullfont!
-Missing character: There is no t in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no n in font nullfont!
-Missing character: There is no ] in font nullfont!
-Missing character: There is no v in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no r in font nullfont!
-Missing character: There is no x in font nullfont!
-Missing character: There is no : in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no n in font nullfont!
-Missing character: There is no t in font nullfont!
-Missing character: There is no e in font nullfont!
-Missing character: There is no r in font nullfont!
-Missing character: There is no v in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no l in font nullfont!
-Missing character: There is no [ in font nullfont!
-Missing character: There is no - in font nullfont!
-Missing character: There is no 3 in font nullfont!
-Missing character: There is no : in font nullfont!
-Missing character: There is no 3 in font nullfont!
-Missing character: There is no ] in font nullfont!
-Missing character: There is no s in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no m in font nullfont!
-Missing character: There is no p in font nullfont!
-Missing character: There is no l in font nullfont!
-Missing character: There is no e in font nullfont!
-Missing character: There is no s in font nullfont!
-Missing character: There is no 2 in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no f in font nullfont!
-Missing character: There is no u in font nullfont!
-Missing character: There is no n in font nullfont!
-Missing character: There is no c in font nullfont!
-Missing character: There is no y in font nullfont!
-Missing character: There is no = in font nullfont!
-Missing character: There is no * in font nullfont!
-Missing character: There is no - in font nullfont!
-Missing character: There is no 1 in font nullfont!
-Missing character: There is no + in font nullfont!
-Missing character: There is no 2 in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
- [5] [6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 437--439
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 439--440
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 440--441
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 441--442
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 442--444
-
- []
-
-<images/gaus.png, id=46, 414.54875pt x 134.5025pt>
-File: images/gaus.png Graphic file (type png)
- <use images/gaus.png>
-Package pdftex.def Info: images/gaus.png used on input line 445.
-(pdftex.def)             Requested size: 207.27386pt x 67.25107pt.
- <images/othrgaus.png, id=48, 532.99126pt x 164.615pt>
-File: images/othrgaus.png Graphic file (type png)
- <use images/othrgaus.png>
-Package pdftex.def Info: images/othrgaus.png used on input line 449.
-(pdftex.def)             Requested size: 266.49498pt x 82.3073pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 459--460
-
- []
-
-[8 <./images/gaus.png> <./images/othrgaus.png>] <images/cancergaus.png, id=54, 563.10374pt x 210.7875pt>
-File: images/cancergaus.png Graphic file (type png)
- <use images/cancergaus.png>
-Package pdftex.def Info: images/cancergaus.png used on input line 466.
-(pdftex.def)             Requested size: 281.55118pt x 105.3935pt.
- [9 <./images/cancergaus.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 548--549
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 549--550
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 550--551
-
- []
-
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 551--552
-
- []
-
-
-Package amsmath Warning: Foreign command \atopwithdelims;
-(amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 582.
-
-
-Overfull \hbox (24.29878pt too wide) in paragraph at lines 587--588
-[]\OT1/cmr/m/n/10 Probability of 8 heads in 10 flips: writ-ten as a func-tion $\OMS/cmsy/m/n/10 L\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p\OT1/cmr/m/n/10 )$ of dis-tri-bu-tion pa-ram-e-ter(s); this is the $[]$ 
- []
-
-[11] [12] <images/eigenvectors.png, id=69, 611.28375pt x 330.23375pt>
-File: images/eigenvectors.png Graphic file (type png)
- <use images/eigenvectors.png>
-Package pdftex.def Info: images/eigenvectors.png used on input line 645.
-(pdftex.def)             Requested size: 305.64113pt x 165.11646pt.
- <images/basis.png, id=70, 594.22pt x 232.87pt>
-File: images/basis.png Graphic file (type png)
- <use images/basis.png>
-Package pdftex.def Info: images/basis.png used on input line 657.
-(pdftex.def)             Requested size: 297.10927pt x 116.43471pt.
- [13 <./images/eigenvectors.png> <./images/basis.png>] <images/ellipses.png, id=77, 612.2875pt x 345.29pt>
-File: images/ellipses.png Graphic file (type png)
- <use images/ellipses.png>
-Package pdftex.def Info: images/ellipses.png used on input line 671.
-(pdftex.def)             Requested size: 428.59833pt x 241.70134pt.
- <images/matrices.png, id=78, 606.265pt x 450.68375pt>
-File: images/matrices.png Graphic file (type png)
- <use images/matrices.png>
-Package pdftex.def Info: images/matrices.png used on input line 690.
-(pdftex.def)             Requested size: 303.13176pt x 225.34131pt.
- [14 <./images/ellipses.png>] [15 <./images/matrices.png>] <images/gaussiantransformation.png, id=87, 707.64375pt x 538.01pt>
-File: images/gaussiantransformation.png Graphic file (type png)
- <use images/gaussiantransformation.png>
-Package pdftex.def Info: images/gaussiantransformation.png used on input line 742.
-(pdftex.def)             Requested size: 353.82101pt x 269.00433pt.
- [16 <./images/gaussiantransformation.png>] <images/smaple.png, id=92, 479.7925pt x 298.11375pt>
-File: images/smaple.png Graphic file (type png)
- <use images/smaple.png>
-Package pdftex.def Info: images/smaple.png used on input line 806.
-(pdftex.def)             Requested size: 239.89565pt x 149.0565pt.
-
-Overfull \hbox (82.2921pt too wide) in paragraph at lines 819--820
-[]\OT1/cmr/m/n/10 Goal is to choose c that max-i-mizes $\OML/cmm/m/it/10 P\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 X \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 x\OMS/cmsy/m/n/10 j\OML/cmm/m/it/10 Y \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 c\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ^^Y[]$ \OT1/cmr/m/n/10 , which is equiv-a-lent to max-i-miz-ing the $[]$, 
- []
-
-[17 <./images/smaple.png>] <images/LDA.png, id=98, 580.1675pt x 453.695pt>
-File: images/LDA.png Graphic file (type png)
- <use images/LDA.png>
-Package pdftex.def Info: images/LDA.png used on input line 828.
-(pdftex.def)             Requested size: 290.08302pt x 226.84694pt.
-File: images/LDA.png Graphic file (type png)
- <use images/LDA.png>
-Package pdftex.def Info: images/LDA.png used on input line 848.
-(pdftex.def)             Requested size: 290.08302pt x 226.84694pt.
- [18 <./images/LDA.png>] <images/lda_projections.png, id=103, 339.2675pt x 229.85875pt>
-File: images/lda_projections.png Graphic file (type png)
- <use images/lda_projections.png>
-Package pdftex.def Info: images/lda_projections.png used on input line 857.
-(pdftex.def)             Requested size: 169.63333pt x 114.92908pt.
- <images/overfitting.png, id=104, 598.235pt x 280.04625pt>
-File: images/overfitting.png Graphic file (type png)
- <use images/overfitting.png>
-Package pdftex.def Info: images/overfitting.png used on input line 866.
-(pdftex.def)             Requested size: 299.11676pt x 140.02277pt.
- [19 <./images/lda_projections.png> <./images/overfitting.png>] <images/leastsquares.png, id=111, 277.035pt x 219.82124pt>
-File: images/leastsquares.png Graphic file (type png)
- <use images/leastsquares.png>
-Package pdftex.def Info: images/leastsquares.png used on input line 938.
-(pdftex.def)             Requested size: 138.51715pt x 109.91034pt.
- [20] [21 <./images/leastsquares.png>] <images/yhat.png, id=119, 581.17125pt x 130.4875pt>
-File: images/yhat.png Graphic file (type png)
- <use images/yhat.png>
-Package pdftex.def Info: images/yhat.png used on input line 996.
-(pdftex.def)             Requested size: 290.58492pt x 65.24358pt.
- <images/logistics.png, id=120, 650.43pt x 209.78375pt>
-File: images/logistics.png Graphic file (type png)
- <use images/logistics.png>
-Package pdftex.def Info: images/logistics.png used on input line 1028.
-(pdftex.def)             Requested size: 325.2142pt x 104.8916pt.
- [22 <./images/yhat.png> <./images/logistics.png>] <images/gradients.png, id=126, 528.97626pt x 185.69376pt>
-File: images/gradients.png Graphic file (type png)
- <use images/gradients.png>
-Package pdftex.def Info: images/gradients.png used on input line 1036.
-(pdftex.def)             Requested size: 264.48747pt x 92.84665pt.
- <images/regression.png, id=127, 347.2975pt x 265.99374pt>
-File: images/regression.png Graphic file (type png)
- <use images/regression.png>
-Package pdftex.def Info: images/regression.png used on input line 1050.
-(pdftex.def)             Requested size: 173.64832pt x 132.99654pt.
- [23 <./images/gradients.png> <./images/regression.png>] [24] <images/ldavsregression.png, id=136, 574.145pt x 235.88126pt>
-File: images/ldavsregression.png Graphic file (type png)
- <use images/ldavsregression.png>
-Package pdftex.def Info: images/ldavsregression.png used on input line 1149.
-(pdftex.def)             Requested size: 287.0718pt x 117.94034pt.
- <images/ROCCurve.png, id=137, 610.28pt x 448.67625pt>
-File: images/ROCCurve.png Graphic file (type png)
- <use images/ROCCurve.png>
-Package pdftex.def Info: images/ROCCurve.png used on input line 1157.
-(pdftex.def)             Requested size: 305.13925pt x 224.33757pt.
- [25 <./images/ldavsregression.png>] <images/polyregression.png, id=143, 603.25375pt x 431.6125pt>
-File: images/polyregression.png Graphic file (type png)
- <use images/polyregression.png>
-Package pdftex.def Info: images/polyregression.png used on input line 1180.
-(pdftex.def)             Requested size: 301.62613pt x 215.80571pt.
- [26 <./images/ROCCurve.png> <./images/polyregression.png>] [27] <images/noise.png, id=152, 487.8225pt x 338.26375pt>
-File: images/noise.png Graphic file (type png)
- <use images/noise.png>
-Package pdftex.def Info: images/noise.png used on input line 1277.
-(pdftex.def)             Requested size: 243.91064pt x 169.13145pt.
- [28] <images/errorvsbias.png, id=156, 674.52pt x 453.695pt>
-File: images/errorvsbias.png Graphic file (type png)
- <use images/errorvsbias.png>
-Package pdftex.def Info: images/errorvsbias.png used on input line 1294.
-(pdftex.def)             Requested size: 337.25917pt x 226.84694pt.
- [29 <./images/noise.png> <./images/errorvsbias.png>] [30] <images/ridge.png, id=165, 552.0625pt x 239.89626pt>
-File: images/ridge.png Graphic file (type png)
- <use images/ridge.png>
-Package pdftex.def Info: images/ridge.png used on input line 1346.
-(pdftex.def)             Requested size: 276.03056pt x 119.94783pt.
- <images/sqrsvslambda.png, id=166, 330.23375pt x 261.97874pt>
-File: images/sqrsvslambda.png Graphic file (type png)
- <use images/sqrsvslambda.png>
-Package pdftex.def Info: images/sqrsvslambda.png used on input line 1350.
-(pdftex.def)             Requested size: 165.11646pt x 130.98904pt.
- <images/lambdabiasvsvariance.png, id=167, 418.56375pt x 244.915pt>
-File: images/lambdabiasvsvariance.png Graphic file (type png)
- <use images/lambdabiasvsvariance.png>
-Package pdftex.def Info: images/lambdabiasvsvariance.png used on input line 1363.
-(pdftex.def)             Requested size: 209.28136pt x 122.45718pt.
- [31 <./images/ridge.png> <./images/sqrsvslambda.png>] [32 <./images/lambdabiasvsvariance.png>] [33] [34] <images/lassol1.png, id=184, 624.3325pt x 352.31625pt>
-File: images/lassol1.png Graphic file (type png)
- <use images/lassol1.png>
-Package pdftex.def Info: images/lassol1.png used on input line 1571.
-(pdftex.def)             Requested size: 374.60239pt x 211.39137pt.
-
-<images/standarizesweights.png, id=185, 499.8675pt x 361.35pt>
-File: images/standarizesweights.png Graphic file (type png)
- <use images/standarizesweights.png>
-Package pdftex.def Info: images/standarizesweights.png used on input line 1572.
-(pdftex.def)             Requested size: 299.9228pt x 216.81168pt.
- [35] [36 <./images/lassol1.png> <./images/standarizesweights.png>] <images/tree:graph.png, id=194, 493.845pt x 238.8925pt>
-File: images/tree:graph.png Graphic file (type png)
- <use images/tree:graph.png>
-Package pdftex.def Info: images/tree:graph.png used on input line 1588.
-(pdftex.def)             Requested size: 296.30928pt x 143.3366pt.
- <images/decisiontreeexamples.png, id=195, 246.9225pt x 240.9pt>
-File: images/decisiontreeexamples.png Graphic file (type png)
- <use images/decisiontreeexamples.png>
-Package pdftex.def Info: images/decisiontreeexamples.png used on input line 1599.
-(pdftex.def)             Requested size: 197.53824pt x 192.72025pt.
- [37 <./images/tree:graph.png> <./images/decisiontreeexamples.png>]
-Overfull \hbox (24.86148pt too wide) in paragraph at lines 1622--1623
-[]\OT1/cmr/m/n/10 Choose the split that min-i-mizes $\OML/cmm/m/it/10 J\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 S[]\OT1/cmr/m/n/10 ) + \OML/cmm/m/it/10 J\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 S[]\OT1/cmr/m/n/10 )$; or, the split that min-i-mizes the weighted av-er-age $[]$ 
- []
-
-<images/idea1good.png, id=202, 556.0775pt x 132.495pt>
-File: images/idea1good.png Graphic file (type png)
- <use images/idea1good.png>
-Package pdftex.def Info: images/idea1good.png used on input line 1628.
-(pdftex.def)             Requested size: 333.64908pt x 79.49759pt.
- <images/idea1bad.png, id=203, 426.59375pt x 158.5925pt>
-File: images/idea1bad.png Graphic file (type png)
- <use images/idea1bad.png>
-Package pdftex.def Info: images/idea1bad.png used on input line 1633.
-(pdftex.def)             Requested size: 255.95822pt x 95.15622pt.
- <images/entropy.png, id=204, 406.51875pt x 270.00874pt>
-File: images/entropy.png Graphic file (type png)
- <use images/entropy.png>
-Package pdftex.def Info: images/entropy.png used on input line 1649.
-(pdftex.def)             Requested size: 284.56117pt x 189.00482pt.
- [38 <./images/idea1good.png> <./images/idea1bad.png>] <images/informationgain.png, id=210, 489.83pt x 222.8325pt>
-File: images/informationgain.png Graphic file (type png)
- <use images/informationgain.png>
-Package pdftex.def Info: images/informationgain.png used on input line 1656.
-(pdftex.def)             Requested size: 293.90025pt x 133.70053pt.
- <images/idea1vsidea2.png, id=211, 507.8975pt x 265.99374pt>
-File: images/idea1vsidea2.png Graphic file (type png)
- <use images/idea1vsidea2.png>
-Package pdftex.def Info: images/idea1vsidea2.png used on input line 1660.
-(pdftex.def)             Requested size: 355.52583pt x 186.19434pt.
- [39 <./images/entropy.png> <./images/informationgain.png> <./images/idea1vsidea2.png>] <images/binarysplits.png, id=218, 374.39874pt x 123.46124pt>
-File: images/binarysplits.png Graphic file (type png)
- <use images/binarysplits.png>
-Package pdftex.def Info: images/binarysplits.png used on input line 1670.
-(pdftex.def)             Requested size: 224.64098pt x 74.0773pt.
- [40 <./images/binarysplits.png>] (/Users/carlosflrs/Google Drive/cs189/cs189-files/my_notes/.texpadtmp/notes.aux) ) 
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (/Users/carlosflrs/Google Drive/cs189/cs189-files/my_notes/.texpadtmp/notes.aux) ) 
 Here is how much of TeX's memory you used:
- 17868 strings out of 493117
- 375267 string characters out of 6135433
- 450939 words of memory out of 5000000
- 20958 multiletter control sequences out of 15000+600000
- 14433 words of font info for 54 fonts, out of 8000000 for 9000
+ 16997 strings out of 493117
+ 357651 string characters out of 6135433
+ 408357 words of memory out of 5000000
+ 20142 multiletter control sequences out of 15000+600000
+ 7882 words of font info for 30 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,17n,80p,407b,1530s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on "/Users/carlosflrs/Google Drive/cs189/cs189-files/my_notes/.texpadtmp/notes.pdf" (40 pages, 4249631 bytes).
+ 55i,5n,65p,407b,219s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on "/Users/carlosflrs/Google Drive/cs189/cs189-files/my_notes/.texpadtmp/notes.pdf" (1 page, 39649 bytes).
 PDF statistics:
- 290 PDF objects out of 1000 (max. 8388607)
- 156 compressed objects within 2 object streams
+ 28 PDF objects out of 1000 (max. 8388607)
+ 20 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 188 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
