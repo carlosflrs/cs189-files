@@ -1,0 +1,219 @@
+[I told you last week that neural net research was popular in the 60's, but
+ the 1969 book "Perceptrons" killed interest in them throughout the 70's.  They
+ came back in the 80's, but interest was partly killed off a second time in the
+ 00's by...guess what?  By support vector machines.  SVMs work well for a lot
+ of tasks, they're faster to train, and they more or less have only one
+ hyperparameter, whereas neural nets take a lot of work to tune.]
+[Neural nets are now in their third wave of popularity.  The single biggest
+ factor in bringing them back is probably big data.  Thanks to the internet,
+ we now have absolutely huge collections of images to train neural nets with,
+ and researchers have discovered that neural nets often give better performance
+ than competing algorithms when you have huge amounts of data to train them
+ with.  In particular, convolutional neural nets are now learning better
+ features than hand-tuned features.  That's a recent change.]
+
+[One event that brought attention back to neural nets was the ImageNet Image
+ Classification Challenge in 2012.]
+[Show ImageNet slide (imagenet.png).]
+[The winner of that competition was a neural net, and it won by a huge margin,
+ about 10%.  It's called AlexNet, and it's surprisingly similarly to LeNet 5,
+ in terms of how its layers are structured.  However, there are some new
+ innovations that led to their prize-winning performance, besides the fact that
+ the training set had 1.4 million images:  they used ReLUs, GPUs for training,
+ and dropout.]
+[Show AlexNet convolutional neural net diagram (alexnet.pdf).]
+
+
+UNSUPERVISED LEARNING
+=====================
+We have sample points, but no labels!
+No classes, no y-values, nothing to predict.
+Goal:  Discover structure in the data.
+
+Examples:
+- Clustering:  partition data into groups of similar/nearby points.
+- Dimensionality reduction:  data often lies near a low-dimensional subspace
+  (or manifold) in feature space; matrices have low-rank approximations.
+  [Whereas clustering is about grouping similar sample points, dimensionality
+   reduction is more about identifying a continuous variation from sample point
+   to sample point.]
+- Density estimation:  fit a continuous distribution to discrete data.
+  [When we use maximum likelihood estimation to fit Gaussians to sample points,
+   that's density estimation, but we can also fit functions more complicated
+   than Gaussians, with more local variation.]
+
+
+PRINCIPAL COMPONENTS ANALYSIS (PCA) (Karl Pearson, 1901)
+=============================
+Goal:  Given sample points in R^d, find k directions that capture most of the
+variation.  (Dimensionality reduction.)
+[Show 3D points projected to 2D (3dpca.pdf).]
+[Show MNIST digits projected to 2D (pcadigits.pdf).]
+
+Why?
+- Find a small basis for representing variations in complex things, e.g. faces.
+- Reducing # of dimensions makes some computations cheaper, e.g. regression.
+- Remove irrelevant dimensions to reduce overfitting in learning algs.
+  Like subset selection, but we can choose features that aren't axis-aligned,
+  i.e., linear combos of input features.
+[Sometimes PCA is used as a preprocess before regression or classification for
+ the last two reasons.]
+
+Let X be n-by-d design matrix.  [No fictitious dimension.]
+From now on, assume X is centered:  mean X_i is zero.
+[As usual, we can center the data by computing the mean x-value, then
+ subtracting the mean from each sample point.]
+
+[Let's start by seeing what happens if we pick just one principal direction.]
+Let w be a unit vector.                                 ~
+The _orthogonal_projection_ of point x onto vector w is x = (x . w) w
+               ~   x . w
+If w not unit, x = ----- w
+                   |w|^2
+
+                    o x
+                    |
+                    |
+       w            v ~
+   O---------->     o x
+
+[The idea is that we're going to pick the best direction w, then project all
+ the data down onto w so we can analyze it in a one-dimensional space.
+ Of course, we lose a lot of information when we project down from d dimensions
+ to just one.  So, suppose we pick several directions.  Those directions span
+ a subspace, and we want to project points orthogonally onto the subspace.
+ This is easy *if* the directions are orthogonal to each other.]
+                                            ~    k
+Given orthonormal directions v_1, ..., v_k, x = sum (x . v ) v
+                                                i=1       i   i
+[The word "orthonormal" implies they're mutually orthogonal and length 1.]
+[Draw picture of orthogonal projection of a point onto a plane in 3D space.]
+[Usually we don't actually want the projected point in R^d;
+ usually we want the coordinates x . v_i in principal components space.]
+
+X^T X is square, symmetric, positive semidefinite, d-by-d matrix.
+Let 0 <= lambda_1 <= lambda_2 <= ... <= lambda_d be its eigenvalues.   [sorted]
+Let v_1, v_2, ..., v_d be corresponding orthogonal *unit* eigenvectors.
+[It turns out that the principal directions will be these eigenvectors, and
+ the most important ones will be the ones with the greatest eigenvalues.
+ I will show you this in three different ways.]
+
+PCA derivation 1:  Fit a Gaussian to data with maximum likelihood estimation.
+Choose k Gaussian axes of greatest variance.
+[Show Gaussian fitted to sample points (gaussfitpca.png).]
+                                                ^     1  T
+Recall that MLE estimates a covariance matrix Sigma = - X  X.  [If X centered.]
+                                                      n
+PCA Alg:
+- Center X.
+- Optional:  Normalize X.  Units of measurement different?
+  * Yes:  Normalize.  
+    [Bad for principal components to depend on arbitrary choice of scaling.]
+  * No:  Usually don't.
+    [If several features have the same unit of measurement, but some of them
+     have much smaller variance, that difference is usually meaningful.]
+  [Show difference outcomes between normalized and not (normalize.pdf).]
+- Compute unit eigenvectors/values of X^T X.
+- Optional:  choose k based on the eigenvalue sizes.
+- For the best k-dimensional subspace, pick eigenvectors v_{d-k+1}, ..., v_d.
+- Compute the coordinates of training/test data in principal components space.
+  [When we do this projection, we have two choices:  we can un-center the input
+   data before projecting it, OR we can translate the test data by the same
+   vector we used to translate the training data when we centered it.]
+[Show graph of # of eigenvectors vs. variance captured (variance.pdf).
+ In this example, just 3 eigenvectors capture 70% of the variance.]
+[If you are using PCA as a preprocess for a supervised learning algorithm,
+ there's a more effective way to choose k:  (cross-)validation.]
+
+
+PCA derivation 2:  Find direction w that maximizes variance of projected data
+[In other words, when we project the data down, we don't want it all to bunch
+ up; we want to keep it as spread out as possible.]
+[Show projection of points (project.jpg).]
+                                                               T  T
+        ~   ~        ~       1  n         w  2   1 |Xw|^2   1 w  X  X w
+  Var({ X , X , ..., X  }) = - sum (X  . ---)  = - ------ = - ---------
+         1   2        n      n i=1   i   |w|     n  |w|^2   n   w^T w
+                                                              \_______/
+                                             _Rayleigh_quotient_ of X^T X and w
+
+[This fraction is a well-known construction called the Rayleigh quotient.  When
+ you see it, you should smell eigenvectors nearby.  How do we maximize this?]
+If w is an eigenvector v_i, Ray. quo. = lambda_i
+-> of all eigenvectors, v_d achieves maximum variance lambda_d / n.
+One can show v_d beats every other vector too.
+[Because every vector w is a linear combination of eigenvectors, and so
+ its Rayleigh quotient will be a convex combination of eigenvalues.
+ It's easy to prove this, but I don't want to take the time.
+ For the proof, look up "Rayleigh quotient" in Wikipedia.]
+[So the top eigenvector gives us the best direction.  But we typically want
+ k directions.  After we've picked one direction, then we have to pick
+ a direction that's orthogonal to the best direction.  But subject to that
+ constraint, we again pick the direction that maximizes the variance.]
+What if we constrain w to be orthogonal to v_d?  Then pick v_{d-1}.
+
+
+PCA derivation 3:  Find direction w that minimizes "projection error"
+[Show animation of PCA projection (PCAanimation.gif).]
+[You can think of this as a sort of least-squares linear regression, with one
+ important change.  Instead of measuring the error in a fixed vertical
+ direction, we're measuring the error in a direction orthogonal to the
+ principal component direction we choose.]
+[Show linear regression vs. PCA (mylsq.png, mypca.png).]
+
+   n  |     ~ |2    n  |     X_i . w  |2    n       2          w  2
+  sum |X  - X |  = sum |X  - ------- w|  = sum (|X |  - (X  . ---) )
+  i=1 | i    i|    i=1 | i    |w|^2   |    i=1    i       i   |w|
+
+                 = constant - n (variance from derivation 2).
+
+Minimizing projection error = maximizing variance.
+[From this point, we carry on with the same reasoning as derivation 2.]
+
+[Show illustration of the first two principal components of the single
+ nucleotide polymorphism (SNP) matrix for the genes of various Europeans
+ (europegenetics.pdf).  The input matrix has 2,541 people from these locations
+ in Europe, and 309,790 SNPs.  Each SNP is binary, so think of it as 309,790
+ dimensions of zero or one.  The output shows spots on the first two principal
+ components where the projected people from a particular national type are
+ denser than a certain threshold.  What's amazing about this is how closely the
+ projected genotypes match the geography of Europe.  (From Lao et al., 2008.)]
+
+Eigenfaces
+----------
+X contains n images of faces, d pixels each.
+[If we have a 200 x 200 image of a face, we represent it as a vector of length
+ 40,000, the same way we represent the MNIST digit data.]
+Face recognition:  Given a query face, compare it to all training faces;
+                   find nearest neighbor in R^d.
+[This works best if you have several training photos of each person you want to
+ recognize, with different lighting and different facial expressions.]
+Problem:  Each query takes Theta(nd) time.
+Solution:  Run PCA on faces.  Reduce to much smaller dimension d'.
+           Now nearest neighbor takes O(nd') time.
+           [Possibly even less.  We'll talk about speeding up nearest-neighbor
+            search at the end of the semester.  If the dimension is small
+            enough, you can sometimes do better than linear time.]
+[Show images of average face and eigenfaces (facerecaverage.jpg,
+ facereceigen0.jpg, facereceigen119.jpg, facereceigen.jpg).]
+[Show images of a face projected onto the first 4 and 50 eigenvectors
+ (eigenfaceproject.pdf).  Latter is blurry but good enough for recognition.]
+For best results, equalize the intensity distributions first.
+[Show image equalization (facerecequalize.jpg).]
+[If each image has 40,000 pixels, and you reduce it to 40 principal components,
+ then each query face requires you to read 20,000 stored coordinates instead of
+ 20 million pixels.]
+
+[Eigenfaces are not perfect.  They encode both face shape *and* lighting.
+ Ideally, we would have some way to factor out lighting and analyze face shape
+ only, but that's harder.  Some people say that the first 3 eigenfaces are
+ usually all about lighting, and you sometimes get better facial recognition by
+ dropping the first 3 eigenfaces.]
+[Show Blanz-Vetter face morphing video (morphmod.mpg).]
+[Blanz and Vetter use PCA in a more sophisticated way for 3D face modeling.
+ They take 3D scans of people's faces and find correspondences between peoples'
+ faces and an idealized model.  For instance, they identify the tip of your
+ nose, the corners of your mouth, and other facial features, which is something
+ the original eigenface work did not do.  Instead of feeding an array of pixels
+ into PCA, they feed the 3D locations of various points on your face into PCA.
+ This works more reliably.]

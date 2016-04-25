@@ -1,0 +1,236 @@
+Heuristics for Avoiding Bad Local Minima (continued)
+----------------------------------------
+- Train several nets; pick best.
+  [If you train 10 neural nets on the same data, but each starting with
+   different random weights, it's unlikely that any two of them will end up
+   the same.  Some might fall into bad local minima, but probably not all.]
+
+- _Layerwise_pretraining_.
+  [We train one layer of the neural net at a time, starting from the input
+   layer.  The goal is to get the first layer to develop useful features, then
+   for the second layer to develop even more useful features, and so on.
+   This is a complicated topic on the forefront of research that I don't have
+   time to do justice to.  If you're interested, do a search.]
+
+Heuristics for Faster Training
+------------------------------
+[One of the biggest disadvantages of neural nets is that they take a long, long
+ time to train compared to most other classification methods we've studied.
+ Here are some ideas for how to speed them up.  Unfortunately, you often have
+ to experiment with techniques and parameters for a while to figure out which
+ ones will help with your particular application.]
+
+- (1), (2), (3), (4) above.
+
+- Stochastic gradient descent faster than batch on large, redundant data sets.
+  [For example, if you have many different examples of the number "9", they
+   contain some redundant information, and stochastic gradient descent learns
+   the redundant information quickly.]
+  [Show 3-weight neural net and the convergence for batch and stochastic
+   gradient descent (nnet2d.pdf, batchnnet.pdf, stochasticnnet.pdf).]
+  One _epoch_ presents every training example once.  Training usually takes
+  many epochs, but if data is huge it can take less than one.
+
+- _Normalizing_ the data:
+--- First _center_ each feature so mean is zero.
+--- Then scale each feature so variance is constant (~1 is good).
+  [The first step seems to make it easier for hidden units to get into a good
+   operating region of the sigmoid.  The second step makes the objective
+   function better conditioned, so gradient descent converges faster.]
+  [Show example of slow convergence of steepest descent on an objective
+   function with an ill-conditioned Hessian (illcondition.jpg).]
+  [Show 2D example of data normalization (normalize.jpg).]
+
+- Centering the hidden units helps too.
+  Replace sigmoids with 2 s(gamma) - 1 or with tanh gamma.
+  [These functions range from -1 to 1 instead of from 0 to 1.]
+  [If you do this, don't forget that you also need to change s' in backprop.
+   Also, good output target values change to roughly -0.7 and 0.7.]
+
+- Use different learning rate for each layer of weights:
+  earlier layers have smaller gradients, need larger learning rate.
+  [Show second derivatives at different layers (curvaturelayers.pdf).]
+
+- _Emphasizing_schemes_:
+  [Networks learn fastest from the most unexpected examples.  They learn
+   slowest from the most redundant examples.  So we try to emphasize the
+   uncommon examples.]
+--- Shuffle so successive examples are never/rarely same class.
+--- Present examples from rare classes more often, or w/bigger epsilon.
+--- Warning:  can backfire on bad outliers.
+
+- Second-order optimization
+--- No Newton's method; Hessian too expensive.
+--- Nonlinear conjugate gradient; for small nets + small data + regression.
+    Batch descent only!  ->  Too slow with redundant data.
+--- Stochastic Levenberg Marquardt; approximates a diagonal Hessian.
+    [The authors claim convergence is typically three times faster than
+     well-tuned stochastic gradient descent.  The algorithm is complicated and
+     I don't have time to cover it.]
+
+Heuristics to Avoid Overfitting
+-------------------------------
+- Ensemble of neural nets.  Random initial weights; bagging.
+  [We saw how well ensemble learning works for decision trees.
+   It works really well for neural nets too.  The combination of random initial
+   weights and bagging helps ensure that each neural net comes out different,
+   even though they're trained on the same data.  Obviously, this is slow.]
+
+- L_2 regularization, aka _weight_decay_.
+  Add lambda |w|^2 to the cost/loss fn, where w is vector of all weights.
+  [Thus w includes all the weights in matrices V and W, rewritten as a vector.]
+  [We do this for the same reason we do it in ridge regression:
+   penalizing large weights reduces overfitting by reducing the variance.]
+  Effect:  -dJ/dw_i has extra term -2 lambda w_i
+           Weight decays by factor 1 - 2 lambda if not reinforced by training.
+  [Show examples of 2D classification without and with weight decay
+   (weightdecayoff.pdf, weightdecayon.pdf).  "softmax + logistic loss".
+   Observe that second example comes close to the Bayes rule.]
+  [One of the tricky parts of neural nets is deciding how many hidden units
+   there should be.  If there's too few, you can't learn very well, but if
+   there's too many, they tend to overfit.  L_2 regularization and weight decay
+   make it safer to have too many hidden units, so it's less critical to find
+   just the right number.]
+
+- _Dropout_ emulates an ensemble in one network.  (Faster training too.)
+  [Show figure of neural net with dropout (dropout.pdf).]
+  [During training, we temporarily disable a random subset of the units, along
+   with all the edges in and out of those units.  It seems to work well to
+   disable each hidden unit with probability 0.5, and to disable input units
+   with a smaller probability.  We do stochastic gradient descent and we
+   frequently change which random subset of units is disabled.  The authors
+   claim that their method generalizes better than L_2 regularization.
+   It gives some of the advantages of an ensemble, but it's faster to train.]
+
+
+CONVOLUTIONAL NEURAL NETWORKS (ConvNets)
+=============================
+[Convolutional neural nets have caused a big resurgence of interest in neural
+ nets in the last few years.  Often you'll hear the buzzword _deep_learning_,
+ which refers to neural nets with many layers.]
+
+Vision:  inputs are large images.  200 x 200 image = 40,000 pixels.
+If we connect them all to 40,000 hidden units -> 1.6 billion connections.
+Neural nets are often _overparametrized_:  too many weights, too little data.
+[As a rule of thumb, you should have more data than you have weights to
+ estimate.  If you don't follow that rule, you usually overfit very very badly.
+ With images, it's impossible to get enough data to correctly train billions of
+ weights.  We could shrink the images, but then we're throwing away useful
+ data.  Another problem with having billions of weights is that the network
+ becomes very slow to train or even to use.]
+
+[Researchers have addressed these problems by taking inspiration from the
+ neurology of the visual system.  Remember that early in the semester, I told
+ you that you can get better performance on the handwriting recognition task
+ by using edge detectors.  Edge detectors have two interesting properties.
+ First, each edge detector looks at just one small part of the image.  Second,
+ the edge detection computation is the same no matter which part of the image
+ you apply it to.  So let's apply these two properties to neural net design.]
+
+ConvNet ideas:
+(1)  Local connectivity:  A hidden unit (in early layer) connects only to small
+     patch of units in previous layer.
+     [This improves the overparametrization problem, and speeds up the network
+      considerably.]
+(2)  Shared weights:  Groups of hidden units share same set of input weights,
+     called a _mask_ aka _filter_ aka _kernel_.  We learn several masks.
+     [Each mask operates on every patch of image.]
+     Masks x patches = hidden units (in first hidden layer).
+     If one patch learns to detect edges, *every* patch has an edge detector.
+     ConvNets automatically exploit repeated structure in images, audio.
+     _Convolution_:  the same linear transformation applied to different parts
+     of the input by shifting.
+     [Shared weights improve the overparametrization problem even more, because
+      shared weights means fewer weights.  It's a sort of regularization.
+     [But shared weights have another big advantage.  Suppose that gradient
+      descent starts to develop an edge detector.  That edge detector is being
+      trained on *every* part of every image, not just on one spot.  And that's
+      good, because edges appear at different locations in different images.
+      The location no longer matters; the edge detector can learn from edges in
+      every part of the image.]
+
+[In a neural net, you can think of hidden units as features that we learn, as
+ opposed to features that you code up yourself.  Convolutional neural nets
+ take them to the next level by learning features from multiple patches
+ simultaneously and then applying those features everywhere, not just in the
+ patches where they were originally learned.]
+[By the way, although local connectivity is inspired by our visual systems,
+ shared weights obviously don't happen in biology.]
+
+[Go to slides on computing in the visual cortex and ConvNets (cnn.pdf).]
+
+[Neurologists can stick needles into individual neurons in animal brains.
+ After a few hours the neuron dies, but until then they can record its action
+ potentials.  In this way, biologists quickly learned how some of the neurons
+ in the retina, called _retinal_ganglion_cells_, respond to light.  They have
+ interesting _receptive_fields_, illustrated in the slides, which show that
+ each ganglion cell receives excitatory stimulation from receptors in a small
+ patch of the retina but inhibitory stimulation from other receptors around
+ it.]
+
+[The signals from these cells propagate to the V1 visual cortex in the
+ occipital lobe at the back of your skull.  These cells proved much harder to
+ understand.  David Hubel and Torsten Wiesel of the Johns Hopkins University
+ put probes into the V1 visual cortex of cats, but they had a very hard time
+ getting any neurons to fire there.  However, a lucky accident unlocked the
+ secret and ultimately won them the 1981 Nobel Prize in Physiology.]
+
+[Show YouTube movie:  https://www.youtube.com/watch?v=IOHayh06LJ4 ]
+
+[The glass slide happened to be at the particular orientation the neuron was
+ sensitive to.  The neuron doesn't respond to other orientations; just that
+ one.  So they were pretty lucky to catch that.]
+
+[The _simple_cells_ act as line detectors and/or edge detectors by taking
+ a linear combination of inputs from retinal ganglion cells.]
+[The _complex_cells_ act as location-independent line detectors by taking
+ inputs from many simple cells.]
+
+[Later researchers showed that local connectivity runs through the V1 cortex
+ by projecting certain images onto the retina and using radioactive tracers in
+ the cortex to mark which neurons had been firing.  Those images show that the
+ neural mapping from the retina to V1 is "retinatopic", i.e., local.]
+
+[Unfortunately, as we go deeper into the visual system, layers V2 and V3 and
+ so on, we know less and less about what processing the visual cortex does.]
+
+[ConvNets were first popularized by the success of Yann LeCun's "LeNet 5"
+ handwritten digit recognition software.  LeNet 5 has six hidden layers!
+ Layers 1 and 3 are _convolutional_layers_ in which groups of units share
+ weights.  Layers 2 and 4 are _pooling_layers_ that make the image smaller.
+ These are just hardcoded max-functions with no weights and nothing to train.
+ Layers 5 and 6 are just regular layers of hidden units with no shared weights.
+ A great deal of experimentation went into figuring out the number of layers
+ and their sizes.  At its peak, LeNet 5 was responsible for reading the zip
+ codes on 10% of US Mail, and another Yann LeCun system was deployed in ATMs
+ and check reading machines and was reading 10 to 20% of all the checks in the
+ US by the late 90's.]
+
+[When ConvNets were first applied to image analysis, researchers found that
+ some of the learned masks are edge detectors or line detectors, similar to
+ the ones that Hubel and Wiesel discovered!  This created a lot of excitement
+ in both the computer learning community and the neuroscience community.
+ The fact that a neural net can naturally learn the same features as the
+ mammalian visual cortex is impressive.]
+
+[I told you last week that neural nets research was popular in the 60's, but
+ the 1969 book "Perceptrons" killed interest in them throughout the 70's.  They
+ came back in the 80's, but interest was partly killed off a second time in the
+ 00's by...guess what?  By support vector machines.  SVMs work well for a lot
+ of tasks, they're faster to train, and they more or less have only one
+ hyperparameter, whereas neural nets take a lot of work to tune.]
+[Neural nets are now in their third wave of popularity.  The single biggest
+ factor in bringing them back is probably big data.  Thanks to the internet,
+ we now have absolutely huge collections of images to train neural nets with,
+ and researchers have discovered that neural nets often give better performance
+ than competing algorithms when you have huge amounts of data to train them
+ with.  In particular, convolutional neural nets are now learning better
+ features than hand-tuned features.  That's a recent change.]
+
+[One event that brought attention back to neural nets was the ImageNet Image
+ Classification Challenge in 2012.  The winner of that competition was a neural
+ net, and it won by a huge margin, about 10%.  It's called AlexNet, and it's
+ surprisingly similarly to LeNet 5, in terms of how its layers are structured.
+ However, there are some new innovations that led to their prize-winning
+ performance, besides the fact that the training set had 1.4 million images:
+ they used ReLUs, GPUs for training, and dropout.]

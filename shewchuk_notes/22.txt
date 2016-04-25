@@ -1,0 +1,250 @@
+SPECTRAL GRAPH CLUSTERING
+=========================
+Input:  Weighted, undirected graph G = (V, E).  No self-edges.
+        w_ij = weight of edge (i, j) = (j, i); zero if (i, j) not in E.
+[Think of the edge weights as a similarity measure.  A big weight means that
+ the two vertices want to be in the same cluster.  So the circumstances are
+ the opposite of the last lecture on clustering.  Then, we had a distance or
+ dissimilarity function, so small numbers meant that points wanted to stay
+ together.  Today, big numbers mean that vertices want to stay together.]
+Goal:  Cut G into 2 (or more) pieces G_i of similar sizes,
+       but don't cut too much edge weight.
+       [That's a vague goal.  There are many ways to make this precise.
+        Here's a typical goal, which we'll solve approximately.]
+
+                                       Cut(G_1, G_2)
+       e.g. Minimize the _sparsity_ -------------------, aka _cut_ratio_
+                                    Mass(G_1) Mass(G_2)
+
+       where Cut(G_1, G_2) = total weight of cut edges
+             Mass(G_1) = # of vertices in G_1 OR assign masses to vertices
+[The denominator "Mass(G_1) Mass(G_2)" penalizes imbalanced cuts.]
+[Show illustration of four cuts (graph.pdf).  All edges have weight 1.
+ Upper left:  the _minimum_bisection_; a _bisection_ is perfectly balanced.
+ Upper right:  the _minimum_cut_.  Usually very unbalanced; not what we want.
+ Lower left:  the _sparsest_cut_, which is good for many applications.
+ Lower right:  the _maximum_cut_; in this case also the maximum bisection.]
+       Sparsest cut is NP-hard.  [We will look for an approximate solution.]
+
+[We will turn this combinatorial graph cutting problem into algebra.]
+Let n = |V|.  Let y in R^n be an _indicator_vector_:
+        / 1     vertex i in G_1,
+  y  = <
+   i    \ -1    vertex i in G_2.
+
+       w_ij          2    / w       (i, j) is cut,
+  Then ---- (y  - y )  = <   ij
+        4     i    j      \ 0       (i, j) is not cut.
+
+                            w_ij          2
+  Cut(G , G ) =    sum      ---- (y  - y )
+       1   2    (i,j) in E   4     i    j
+
+                1                   2                      2
+              = -    sum      (w   y  - 2 w   y  y  + w   y )
+                4 (i,j) in E    ij  i      ij  i  j    ij  j
+
+                1                                n   2
+              = - (    sum      - 2 w   y  y  + sum y  sum  w   )
+                4   (i,j) in E       ij  i  j   i=1  i k!=i  ik
+                    \_______________________/   \_____________/
+                y^T L y     off-diagonal terms   diagonal terms
+              = -------
+                   4
+                                                   (1)           -            -
+               / - w_ij        i != j,          1 /   \ 3        |  4  -1  -3 |
+  where L   = <                                  /     \     L = | -1   6  -5 |
+         ij    \ sum  w        i = j.          (2)-----(3)       | -3  -5   8 |
+                 k!=i  ik                           5            -            -
+
+L is symmetric, n-by-n _Laplacian_matrix_ for G.
+
+[L is effectively a matrix representation of G.  For the purpose of
+ partitioning a graph, there is no need to distinguish edges of weight zero
+ from edges that are not in the graph.]
+[We see that minimizing the weight of the cut is equivalent to minimizing the
+ _Laplacian_quadratic_form_ y^T L y.  This lets us turn graph partitioning into
+ a problem in matrix algebra.]
+[Usually we assume there are no negative weights, in which case Cut(G_1, G_2)
+ can never be negative, so it follows that L is positive semidefinite.]
+
+If y = *1* = [ 1  1  ...  1 ]^T, then Cut(G_1, G_2) = 0, so     [*1* = bold 1.]
+*1* is an eigenvector of L with eigenvalue 0.
+
+[If G is connected and all the edge weights are positive, then this is the
+ only zero eigenvalue.  But if G is not connected, L has one zero eigenvalue
+ for each connected component of G.  It's easy to prove, but time prevents me.]
+
+_Bisection_:  exactly n/2 vertices in G_1, n/2 in G_2.  Write *1*^T y = 0.
+[So we have reduced graph bisection to this constrained optimization problem.]
+
+  --------------------------------------------
+  |                        T                 |
+  | Find y that minimizes y  L y             |
+  |                                          |
+  | subject to  for all i, y  = 1 or y  = -1 | <- _binary_constraint_
+  |                         i         i      |
+  |                T                         |
+  |        and  *1*  y = 0                   | <- _balance_constraint_
+  --------------------------------------------
+
+Also NP-hard.  We _relax_ the binary constraint.  -> fractional vertices!
+
+[A very common approach in combinatorial optimization algorithms is to relax
+ some of the constraints so a discrete problem becomes a continuous problem.
+ Intuitively, this means that you can put 1/3 of vertex 7 in graph G_1 and
+ the other 2/3 of vertex 7 in graph G_2.  You can even put -1/2 of vertex 7 in
+ graph G_1 and 3/2 of vertex 7 in graph G_2.  This sounds crazy, but the
+ continuous problem is much easier to solve than the combinatorial problem.
+ After we solve it, we will _round_ the vertex values to +1/-1, and we'll hope
+ that our solution is still close to optimal.]
+[We can't just drop the binary constraint, though.  We still need *some*
+ constraint to rule out the solution y = 0.]
+
+New constraint:  y must lie on sphere of radius sqrt(n).
+[Draw figure showing constraint before--y lies at a vertex of the hypercube--
+ and the constraint after--y lies on the sphere through those vertices.]
+
+Relaxed problem:
+  --------------------------
+  |           T            |                T
+  | Minimize y  L y        | \             y  L y
+  |              T         |  > = Minimize ------ = Rayleigh quotient of L & y
+  | subject to  y  y = n   | /               T
+  |                        |                y  y
+  |                T       |
+  |        and  *1*  y = 0 |
+  --------------------------
+
+[Show illustration of isosurfaces of y^T Ly (cylinder.pdf) and
+ illustration restricted to the hyperplane 1^T y = 0 (endview.pdf).]
+
+[You should remember this Rayleigh quotient from the lecture on PCA.  As I said
+ then, when you see a Rayleigh quotient, you should smell eigenvalues nearby.
+ The y that minimizes this Rayleigh quotient is the eigenvector with the
+ smallest eigenvalue.  We already know what that eigenvector is:  it's *1*.
+ But that violates our balance constraint.  As you should recall from PCA, when
+ you've used the most extreme eigenvector and you need an orthogonal one, the
+ next-best optimizer of the Rayleigh quotient is the next eigenvector.]
+
+Let lambda_2 = second-smallest eigenvalue of L.
+Eigenvector v_2 is the _Fiedler_vector_.
+[It would be wonderful if every component of the Fiedler vector was 1 or -1,
+ but that happens more or less never.  So we round it.  The simplest way is to
+ round all positive entries to 1 and all negative entries to -1.  But in both
+ theory and practice, it's better to choose the threshold as follows.]
+
+Spectral partitioning alg.:
+- Compute Fiedler vector v_2 of L
+- _Round_ v_2 with a _sweep_cut_:
+  * Sort components of v_2.
+  * Try the n - 1 cuts between successive components.  Choose min-sparsity cut.
+    [If we're clever about it, we can try all these cuts in time linear in the
+     number of edges in G.]
+
+[Show example of graph partitioned by the sweep cut (specgraph.pdf).]
+[Show what the un-rounded Fiedler vector looks like (specvector.pdf).]
+[One consequence of relaxing the binary constraint is that the balance
+ constraint no longer forces an exact bisection.  But that's okay; we're cool
+ with a slightly off-balance constraint if it means we cut fewer edges.]
+[Show illustration where an off-balance cut is better (lopsided.pdf).]
+
+                                                                 L_ii
+Fact:  Sweep cut finds a cut w/sparsity <= sqrt(2 lambda_2 max_i ----);
+       _Cheeger's_inequality_.                                   M_ii
+       The optimal cut has sparsity >= lambda_2 / 2.
+[So the spectral partitioning algorithm is an approximation algorithm, albeit
+ not one with a constant factor of approximation.  Cheeger's inequality is
+ a very famous result in spectral graph theory, because it's one of the
+ most important cases where you can relax a combinatorial optimization problem
+ to a continuous optimization problem, round the solution, and still have
+ a provably decent solution to the original combinatorial problem.]
+
+Vertex Masses
+-------------
+[Sometimes you want the notion of balance to accord more prominence to some
+ vertices than others.  We can assign masses to vertices.]
+Let M be diagonal matrix with vertex masses on diagonal.
+New balance constraint:  *1*^T M y = 0.
+[This new balance constraint says that G_1 and G_2 should each have the same
+ total mass.  It turns out that this new balance constraint is easier
+ to satisfy if we also revise the sphere constraint a little bit.]
+New ellipsoid constraint:   y^T M y = Mass(G) = sum M_ii.
+[Instead of a sphere, now we constrain y to lie on an axis-aligned ellipsoid.]
+[Draw the ellipsoid, which passes through points of hypercube.]
+
+Now we want Fiedler vector of _generalized_eigensystem_ Lv = lambda Mv.
+[Most algorithms for computing eigenvectors and eigenvalues of symmetric
+ matrices can easily be adapted to compute eigenvectors and eigenvalues of
+ symmetric generalized eigensystems like this too.]
+
+
+Vibration Analogy
+-----------------
+[Show figure of system of springs and masses (vibrate.pdf).]
+[For intuition about spectral partitioning, think of the eigenvectors as
+ vibrational modes in a physical system of springs and masses.  Each vertex
+ models a point mass that is constrained to move freely along a vertical rod.
+ Each edge models a vertical spring with rest length zero and stiffness
+ proportional to its weight, pulling two point masses together.  The masses are
+ free to oscillate sinusoidally on their rods.  The eigenvectors of the
+ generalized eigensystem Lv = lambda Mv are the vibrational modes of this
+ physical system, and their eigenvalues are proportional to their frequencies.]
+
+[Show figure of vibrational modes in path graph and grid graph (grids.pdf).]
+[These illustrations show the first four eigenvectors for two simple graphs.
+ On the left, we see that the first eigenvector is the eigenvector of all 1's,
+ which represents a vertical translation of all the masses in unison.  That's
+ not really a vibration, which is why the eigenvalue is zero.  The second
+ eigenvector is the Fiedler vector, which represents the vibrational mode with
+ the lowest frequency.  Each component indicates the amplitude with which the
+ corresponding point mass oscillates.  At any point in time as the masses
+ vibrate, roughly half the mass is moving up while half is moving down.  So it
+ makes sense to cut between the positive components and the negative
+ components.  The third eigenvector also gives us a nice bisection of the grid
+ graph, entirely different from the Fiedler vector.  Some more sophisticated
+ graph clustering algorithms use multiple eigenvectors.]
+
+[I want to emphasize that spectral partitioning takes a global view of a graph.
+ It looks at the whole gestalt of the graph and finds a good cut.
+ By comparison, the clustering algorithms we saw last lecture were much more
+ local in nature, so they're easier to fool.]
+
+Greedy Divisive Clustering
+--------------------------
+Partition G into 2 subgraphs; recursively cluster them.
+[The sparsity is a good criterion for graph clustering.  Use G's sparsest cut
+ to divide it into two subgraphs, then recursively cut them.  You can stop when
+ you have the right number of clusters, or you could keep going until each
+ subgraph is a single vertex and create a dendrogram.]
+Can form a dendrogram, but it may have inversions.
+[There's no reason to expect that the sparsity of a subgraph is smaller than
+ the sparsity of the parent graph, so the dendrogram can have inversions.
+ But it's still useful for getting an arbitrary number of clusters on demand.]
+
+The Normalized Cut
+------------------
+Set vertex i's mass M_ii = L_ii.  [Sum of edge weights adjoining vertex i.]
+[That is how we define a "normalized cut", which turns out to be a good choice
+ for many different applications.]
+Popular for _image_segmentation_.
+[Image segmentation is the problem of looking at a photograph and separating it
+ into different objects.  To do that, we define a graph on the pixels.]
+For pixels with location w_i, brightness b_i, use graph weights
+
+                        2                    2
+  w   = exp( - |w  - w |  / alpha - |b  - b |  / beta )
+   ij            i    j               i    j
+
+or zero if |w_i - w_j| large.
+[We choose a distance threshold, typically less than 4 to 10 pixels apart.
+ Pixels that are far from each other aren't connected.  alpha and beta are
+ empirically chosen constants.  It often makes sense to choose beta
+ proportional to the variance of the brightness values.]
+
+[Show segmentation of baseball image (baseballsegment.pdf).  The upper left
+ figure is a photo of a scene during a baseball game.  The other figures show
+ segments of the image extracted by recursive spectral partitioning.]
+[Show eigenvectors 2-9 from the baseball image (baseballvectors.pdf).]
+
+Invented by [our own] Prof. Jitendra Malik and his student Jianbo Shi.

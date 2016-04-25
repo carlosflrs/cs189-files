@@ -1,0 +1,234 @@
+Clustering w/Multiple Eigenvectors
+----------------------------------
+For k clusters, compute first k eigenvectors v_1 = 1, v_2, ..., v_k of
+generalized eigensystem Lv = lambda Mv.
+
+       -----------     -----------
+       |1 ^     ^|     |<-- V -->|   [V's columns are the eigenvectors with
+       |1 .     .|     |     1   |    the k largest eigenvalues.]
+       |1 .     .|     |         |
+  V =  |1 v     v|  =  |         |
+       |1 .2    .k     |         |   [Yes, we do include the all-1's vector v
+       |1 .     .|     |         |    as one of the columns of V.]           1
+       |1 v     v|     |<-- V -->|
+       -----------     ------n----
+          n x k
+
+Row V_i is _spectral_vector_ [my name] for vertex i.
+[These are vectors in a k-dimensional space I'll call the "spectral space".
+ When we were using just one eigenvector, it made sense to cluster vertices
+ together if their components were close together.  When we use more than one
+ eigenvector, it turns out that it makes sense to cluster vertices together if
+ their spectral vectors point in similar directions.]
+Normalize each row V_i to unit length.
+[Now you can think of the spectral vectors as points on a unit sphere centered
+ at the origin.]
+[Draw 2D example showing two clusters on a circle.  If the input graph has
+ k components, the points in each cluster will have spectral vectors that are
+ exactly orthogonal to all the other components' spectral vectors.]
+k-means cluster these vectors.
+[Because all the spectral vectors lie on the sphere, k-means clustering will
+ cluster together vectors that are separated by small angles.]
+
+[Show comparison of k-means vs. spectral (compkmeans.png, compspectral.png).
+ These examples use an exponentially decaying function to assign weights to
+ pairs of points, like we used for image segmentation but without the
+ brightnesses.]
+
+Invented by [our own] Prof. Michael Jordan, Stanford Prof. Andrew Ng [when he
+was still a student at Berkeley], Yair Weiss.
+[This wasn't the first algorithm that uses multiple eigenvectors for spectral
+ clustering, but it has become one of the most popular.]
+
+LATENT FACTOR ANALYSIS [aka latent semantic indexing]
+======================
+[You can think of this as dimensionality reduction for matrices.]
+Suppose X is a _term-document_matrix_:  [aka _bag-of-words_model_]
+row i represents document i; column j represents term j.  [Term = word.]
+[Term-document matrices are usually _sparse_, meaning most entries are zero.]
+X_ij = occurrences of term j in doc i?
+       better:  log (1 + occurrences)  [So frequent words don't dominate.]
+[Better still is to weight the entries so rare words give big entries and
+ common words like "the" give small entries.  I'll omit the details.]
+
+                  T    d             T
+Recall SVD X = UDV  = sum delta  u  v .  Suppose delta  <= delta  for i >= j.
+                      i=1      i  i  i                i         j
+
+(Unlike PCA, we usually don't center X.)
+For greatest delta_i, each v_i lists terms in a genre/cluster of documents
+                      each u_i   "   docus using similar/related terms
+E.g. u_1 might have large components for the romance novels,
+     v_1   "    "     "       "      for terms "passion", "ravish", "bodice"...
+[...and delta_1 would give us an idea how much bigger the romance novel market
+ is than the markets for every other genre of books.]
+[v_1 and u_1 tell us that there is a large subset of books that tend to use the
+ same large subset of words.  We can read off the words by looking at the
+ larger components of v_1, and we can read off the books by looking at the
+ larger components of u_1.]
+[The property of being a romance novel is an example of a _latent_factor_.
+ So is the property of being the sort of word used in romance novels.
+ There's nothing in X that tells you explicitly that romance novels exist,
+ but the genre is a hidden connection between them that gives them a large
+ singular value.  The vector u_1 reveals which books have that genre, and
+ v_1 reveals which words are emphasized in that genre.]
+
+Like clustering, but clusters overlap:  if u_1 picks out romances &
+u_2 picks out histories, they both pick out historical romances.
+[So latent factor analysis is a sort of clustering that permits clusters to
+ overlap.  Another way in which it differs from traditional clustering is that
+ the u-vectors contain real numbers, and so some points have stronger cluster
+ membership than others.  One book might be just a bit romance, another more.]
+
+Application in market research:
+identifying consumer types (hipster, soccer mom) & items bought together.
+[For applications like this, the first few singular vectors are the most
+ useful.  Most of the singular vectors are mostly noise, and they have small
+ singular values to tell you so.]
+
+                    r             T
+Truncated sum X' = sum delta  u  v  is _low-rank_approximation_ (rank r) of X.
+                   i=1      i  i  i
+[We choose the singular vectors with the largest singular values, because they
+ carry the most/best information.]
+
+    -----------     ------     -------     -----------
+    |         |     |^  ^|     |d_1 0|     |<-- v -->|
+    |         |     ||  ||     |  .. |     |     1   |
+    |         |  =  ||  ||     |0 d_r|     |<-- v -->|
+    |    X'   |     |u  u|     -------     ------r----
+    |         |     ||1 |r      r x r          r x d
+    |         |     ||  ||
+    |         |     |v  v|
+    -----------     ------
+       n x d         n x r
+  -------------------------------------------------------------------
+  | X' is the rank-r matrix that minimizes [squared] Frobenius norm |
+  |             2                   2                               |
+  |   ||X - X'||  = sum (X   - X'  )                                |
+  |             F   i,j   ij     ij                                 |
+  -------------------------------------------------------------------
+Applications:
+- Fuzzy search.  [Suppose you want to find a document about gasoline prices,
+  but the document you want doesn't have the word "gasoline"; it has the word
+  "petrol".  One cool thing about the reduced-rank matrix X' is that it will
+  probably associate that document with "gasoline", because the SVD tends to
+  group synonyms together.]
+- Denoising.  [The idea is to assume that X is a noisy measurement of some
+  unknown matrix which probably has low rank.  If that assumption is partly
+  true, then the reduced-rank matrix X' might be better than the input X.]
+- Collaborative filtering:  fills in unknown values, e.g. user ratings.
+  [Suppose the rows of X repesents Netflix users and the columns represent
+   movies.  The entry X_ij is the review score that user i gave to movie j.
+   But most users haven't reviewed most movies.  Just as the rank reduction
+   will associate "petrol" with "gasoline", it will tend to associate users
+   with similar tastes in movies, so the reduced-rank matrix X' can predict
+   ratings for users who didn't supply any.  You'll try this out in the last
+   homework.]
+
+NEAREST NEIGHBOR CLASSIFICATION
+===============================
+[We're done with unsupervised learning.  Now I'm going back to classifiers, and
+ I saved one of the simplest for the end of the semester.]
+
+Idea:  Given query point v, find the k input points nearest v.
+       Distance metric of your choice.
+       Regression:  Return average value of the k points.
+       Classification:  Return class with the most votes from the k points OR
+                        return histogram of class probabilities.
+[Obviously, the histogram of class probabilities has limited precision.  If
+ k = 3, then the only probabilities you'll ever return are 0, 1/3, 2/3, or 1.
+ You can improve the precision by making k larger, but you might underfit.
+ It works best when you have a huge amount of data.]
+
+[Show examples of 1-NN, 10-NN, and 100-NN (ISL, Figures 2.15, 2.16)
+ (allnn.pdf).  You see that a larger k smooths out the boundary.  In this
+ example, the 1-NN classifier is badly overfitting the data, and the 100-NN
+ classifier is badly underfitting.  The 10-NN classifier does well:  it's
+ reasonably close to the Bayes decision boundary.  Generally, the ideal k
+ depends on how dense your data is.  As your data gets denser, the optimal k
+ increases.]
+
+[There are theorems showing that if you have a lot of data, nearest neighbors
+ can work quite well.]
+Theorem (Cover & Hart, 1967):
+As n -> infinity, the 1-NN error rate is < B (2 - B)      where B = Bayes risk.
+  if only 2 classes, <= 2B (1 - B)
+[There are a few technical requirements of this theorem.  The most important
+ is that the training points and the test points all have to be drawn
+ independently from the same probability distribution.  The theorem applies to
+ any separable metric space, so it's not just for the Euclidean metric.]
+
+Theorem (Fix & Hodges, 1951):
+As n -> infinity, k -> infinity, k/n -> 0,
+k-NN error rate converges to B.  [Which means optimal.]
+
+The Geometry of High-Dimensional Spaces
+---------------------------------------
+Consider unit ball B = { p in R^d : |p| <= 1 }
+       & hypercube H = { p in R^d : |p_i| <= 1 }
+[Draw 2D circle in square, 3D ball in cube.]
+[In two dimensions, it looks like the circle fills most of the square.  But in
+ 100 dimensions, the ball takes almost no volume compared to the hypercube, and
+ the corners of the cube are a distance of 10 away from the center.  And since
+ there are 2^100 corners, there's a lot of volume out toward the corners.]
+Consider a shell of the sphere.
+[Draw ball of radius r, and concentric ball of radius r - epsilon inside.]
+Volume of outer ball \propto r^d
+Volume of inner ball \propto (r - epsilon)^d
+Ratio of inner ball volume to outer =
+  (r - epsilon)^d        epsilon             epsilon d
+  --------------- = (1 - -------)^d ~ exp (- ---------) for large d -> small!
+        r^d                 r                    r
+
+         epsilon
+E.g.  if ------- = 0.1 & d = 100, inner ball has 0.0027% of volume.
+            r
+
+Random points from uniform distribution in ball: nearly all are in outer shell.
+  "      "     "   Gaussian     "       "   "      "     "   "  "  some    "
+
+[A multivariate Gaussian distribution is weighted to put points closer to the
+ center, but if the dimension is very high, you'll still find that the vast
+ majority of points lie in a thin shell.  As the dimension grows, the
+ *standard*deviation* of a random point's distance to the center gets smaller
+ and smaller compared to the distance itself.]
+
+[This is one of the things that makes machine learning hard in high dimensions.
+ Sometimes the farthest points aren't much farther away than the nearest ones.]
+
+Exhaustive k-NN alg.
+--------------------
+Given query point v:
+- Scan through all n input points, computing (squared) distances to v.
+- Maintain max-heap with the k shortest distances seen so far.
+  [Whenever you encounter an input point closer to v than the point at the top
+   of the heap, you remove the heap-top point and insert the better point.
+   Obviously you don't need a heap if k = 1 or even 3, but if k = 100 a heap
+   will speed up keeping track of the distance to beat.]
+
+Time to construct the classifier:  0
+[This is the only O(0)-time algorithm we'll learn this semester.]
+Query time:  O(nd + n log k)
+             expected O(nd + k log^2 k) if random point order
+[Though in practice I don't recommend randomizing the point order; you'll
+ probably lose more from the cache than you'll gain from randomization.]
+
+Speeding Up NN
+--------------
+Can we preprocess the training points to obtain sublinear query time?
+
+Very low dimensions:  Voronoi diagrams
+Medium dim (up to ~30):  k-d trees
+Larger dim:  locality sensitive hashing [still researchy, not widely adopted]
+Largest dim:  no [stick with exhaustive k-NN.]
+Can use PCA or other dimensionality reduction as preprocess 
+[Most fast nearest-neighbor algorithms in more than a few dimensions are
+ *approximate* nearest neighbor algorithms; we don't necessarily expect to find
+ the exact nearest neighbors any more.  That's usually okay, as machine
+ learning classifiers are rarely perfect.  If we use PCA as a preprocess, then
+ it's even more approximate, but it's much faster.]
+
+PCA:  Row i of UD gives the coordinates of sample point X_i in principal
+components space (i.e. X_i . v_j for each j).  So we don't need to project the
+input points onto that space; the SVD does it for us.

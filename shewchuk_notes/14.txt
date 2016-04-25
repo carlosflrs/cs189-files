@@ -1,0 +1,230 @@
+Kernel Perceptrons
+------------------
+Note:  Everywhere below, we can replace X  with Phi(X )
+                                         i           i
+Recall perceptron alg:
+  while some y  X  . w < 0
+              i  i
+    w <- w + epsilon y  X
+                      i  i
+  for each test pt z
+             T
+    f(z) <- w z
+                    T                 T
+Kernelize with w = X a:   X  . w = (XX a)  = (Ka)
+                           i             i       i
+Dual perceptron alg:
+                      T
+  a = [y_1, 0, ..., 0]            [starting point is arbitrary, but can't be 0]
+  K   = k(X , X )   for all i, j  <= O(n^2 d) time (kernel trick)
+   ij      i   j
+  while some y  (Ka)  < 0
+              i     i
+    a  <- a  + epsilon y          <= optimization:  can update Ka in O(n) time
+     i     i            i
+  for each test pt z
+             n
+    f(z) <- sum a  k(X , z)       <= O(nd) time
+            j=1  j    j
+
+[The d's above do not increase if we replace X_i with a kernelized Phi(X_i)!]
+OR we can compute w = X^T a once in O(nd') time
+   & evaluate test pts in O(d') time/pt, where d' is length of Phi(.)
+
+Interpretation:  a_i reflects how many times we have added epsilon X
+                 (or -epsilon X ) to w.                             i
+                               i
+Kernel Logistic Regression
+--------------------------
+[The stochastic gradient ascent step for logistic regression is just a small
+ modification of the step for perceptrons.  However, remember that we're no
+ longer looking for misclassified samples; instead, we apply the gradient
+ ascent rule to weights in a stochastic, random order--or, alternatively, to
+ all the weights at once.]
+
+Stochastic gradient ascent step:
+  a_i <- a_i + epsilon (y  - s((Ka) ))       [where s is the logistic function]
+                         i         i
+[Just like with perceptrons, every time you update one weight a_i, if you're
+ clever you can update Ka in O(n) time so you don't have to compute it from
+ scratch on the next iteration.]
+
+Gradient ascent step:
+  a <- a + epsilon (y - s(Ka))        <= applying s component-wise to vector Ka
+
+for each test pt z:
+             n
+  h(z) <- s(sum a  k(X , z) )
+            j=1  j    j
+
+[or, if you're using logistic regression as a classifier and you don't care
+ about the probability, you can skip the logistic fn and just compute the sum.]
+
+
+The Gaussian Kernel
+-------------------
+[...But I think our next act is even more mind-blowing.  Since we can now do
+ fast computations in spaces with exponentially large dimension, why don't we
+ go all the way and do computations in infinite-dimensional space?]
+
+_Gaussian_kernel_, aka _radial_basis_fn_kernel_:
+There exists a Phi(x) such that
+                            2
+                     |x - z|
+  k(x, z) = exp ( - --------- )
+                    2 sigma^2
+
+[In case you're curious, here's the feature vector that gives you this kernel,
+ for the case where you have only one input feature per sample.]
+
+e.g. for d = 1,         2                                  2
+                       x                x                 x               T
+  Phi(x) = exp ( - --------- ) [1, --------------, ----------------, ... ]
+                   2 sigma^2       sigma sqrt(1!)  sigma^2 sqrt(2!)  
+
+[This is an infinite vector, and Phi(x)^T Phi(z) is a converging series.
+ Nobody actually uses this value of Phi(x) directly, or even cares about it;
+ they just use the kernel function k(.,.).]
+[At this point, it's best *not* to think of points in a high-dimensional space.
+ Instead, think of the kernel k as a measure of how similar or close together
+ two samples are to each other.]
+                                     n
+Key observation:  hypothesis h(z) = sum a  k(X , z) is a linear combo of
+                                    j=1  j    j
+                  Gaussians centered at samples.
+                  [The dual weights are the coefficients of the linear combo.]
+                  [Think of the Gaussians as a basis for the hypothesis.]
+                  [Show example hypothesis (gausskernel.pdf)]
+
+Very popular in practice!  Why?
+- Gives very smooth h
+- Behaves somewhat like k-nearest neighbor, but smoother
+- Oscillates less than polynomials (depending on sigma)
+- k(x, z) can be interpreted as a "similarity measure".
+  Gaussian is maximum when x = z, goes to 0 as distance increases.
+- Samples "vote" for value at z, but closer samples get weighter vote.
+
+[The "standard" kernel x . y assigns high value to vectors that point in
+ roughly the same direction.  The Gaussian kernel assigns high value to points
+ near each other.]
+
+sigma trades off bias vs. variance:
+  larger sigma -> wider Gaussians, smoother h -> more bias, less variance
+Choose by (cross-)validation.
+
+[Show decision boundary of SVM with Gauss kernel (gausskernelsvm.pdf)]
+
+[By the way, there are many other kernels like this that are defined directly
+ as kernel functions without worrying about Phi.  But not every function can be
+ a kernel function.  A function is qualified only if it always generates
+ a positive semidefinite kernel matrix, no matter what the samples are.]
+
+
+SUBSET SELECTION
+================
+All features increase variance, but not all features reduce bias (much).
+Idea:  Identify poorly predictive features, ignore them (weight zero).
+       Less overfitting, lower test errors.
+2nd motivation:  Inference.  Simpler models convey interpretable wisdom.
+Useful in all classification & regression methods.
+Sometimes it's hard:  Different features can partly encode same information.
+                      Combinatorially hard to choose best feature subset.
+
+Alg:  Best subset selection.  Try all 2^d - 1 nonempty subsets of features.
+      Choose the best model by (cross-)validation.  Slow.
+
+[Obviously, best subset selection isn't tractible if we have a lot of features.
+ But it gives us an "ideal" algorithm to compare practical algorithms with.
+ If d is large, there is no algorithm that's both guaranteed to find the best
+ subset and that runs in acceptable time.  But heuristics often work well.]
+
+Heuristic:  Forward stepwise selection.
+Start with _null_model_ (0 features); repeatedly add best feature until
+test errors start increasing (due to overfitting) instead of decreasing.
+At each outer iteration, inner loop tries every feature and chooses the best
+by cross-validation.  Requires training O(d^2) models instead of O(2^d).
+Not perfect:  Won't find the best 2-feature model if neither of those features
+              yields the best 1-feature model.
+
+Heuristic:  Backward stepwise selection.
+Start with all d features; repeatedly remove feature whose removal gives best
+reduction in test errors.  Also trains O(d^2) models.
+Additional heuristic:  Only try to remove features with small weights.
+  Q:  small relative to what?
+                                                                2   T   -1
+  Recall:  variance of least-squ. regr. is proportional to sigma  (X  X)
+                                       w_i
+  _z-score_ of weight w  is z  = ---------------
+                       i     i   sigma sqrt(v_j)
+                                       T   -1
+  where v_j is jth diagonal entry of (X  X)  .
+  Small z-score hints "true" w_i could be zero.
+
+[Forward stepwise selection is a better choice when you suspect only a few
+ features will be good predictors.  Backward stepwise is better when you
+ suspect most of the features will be necessary.  If you're lucky, you'll stop
+ early.]
+
+
+LASSO (Tibshirani, 1996)
+=====
+Regression w/regularization:  (1) + (A) + l_1 penalized mean loss (e).
+"Least absolute shrinkage and selection operator"
+[This is a regularized regression method similar to ridge regression, but it
+ has the advantage that it often naturally sets some of the weights to zero.]
+
+  --------------------------------------------------
+  |                               2                |
+  | Find w that minimizes |Xw - y|  + lambda |w'|  |
+  |                                              1 |
+  --------------------------------------------------
+               n
+where |w'|  = sum |w |                                  (Don't penalize alpha.)
+          1   i=1   i
+                                             2
+Recall ridge regr.:  isosurfaces of |w'|  are hyperspheres.
+                                             2
+The isosurfaces of |w'|  are _cross-polytopes_.
+                       1
+The unit cross-polytope is the convex hull of all the positive and negative
+unit coordinate vectors.
+
+               ^
+              /|\
+             / | \
+      2D:   <--+-->           3D:  [Draw 3D cross-polytope]
+             \ | /
+              \|/
+               v
+[You get other cross-polytope isosurfaces by scaling this.]
+[Show plot of isocontours for the two objective fn terms (lassoridge.pdf)]
+[Recall that beta is the least-squares solution, and the red ellipses are the
+ isocontours of |Xw - y|^2.  The isocontours of |w'|_1 are diamonds centered at
+ the origin (blue).  The solution lies where a red isocontour just touches
+ a blue diamond.  What's interesting here is that in this example, the red
+ isocontour touches just the tip of the diamond.  So one of the weights gets
+ set to zero.  That's what we want to happen to weights that don't have enough
+ influence.  This doesn't always happen--for instance, the red isosurface could
+ touch a side of the diamond instead of a tip of the diamond.]
+[When you go to higher dimensions, you might have several weights set to zero.
+ For example, in 3D, if the red isosurface touches a sharp corner of the
+ cross-polytope, two of the three weights get set to zero.  If it touches
+ a sharp edge of the cross-polytope, one weight gets set to zero.  If it
+ touches a flat side of the cross-polytope, no weight is zero.]
+[Show plot of weights as a function of lambda (lassoweights.pdf)]
+[This shows the weights for a typical linear regression problem with about 10
+ variables.  You can see that as lambda increases, more and more of the weights
+ become zero.  Only four of the weights are really useful for prediction;
+ they're in color.  Statisticians used to choose lambda by looking at a chart
+ like this and trying to eyeball a spot where there aren't too many predictors
+ and the weights aren't changing too fast.  But nowadays they prefer
+ cross-validation, as always.]
+
+Sometimes sets some weights to zero, especially for large lambda.
+Algs:  subgradient descent, least-angle regression (LARS), forward stagewise
+[Lasso's objective function is not smooth, and that makes it tricky to
+ optimize.  I'm not going to teach you an optimization method for Lasso.  If
+ you need one, look up the last two of these names; LARS is built into the
+ R Programming Language for statistics.]
+[As with ridge regression, you should probably normalize the features first
+ before applying this method.]

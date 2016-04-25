@@ -1,0 +1,214 @@
+NEURAL NETWORKS
+===============
+Can do both classification and regression.
+
+[Ties together several ideas from the course:  perceptrons, logistic
+ regression, ensembles of learners, and stochastic gradient descent.
+ It also ties in the idea of lifting samples to a higher-dimensional feature
+ space, but with a new twist:  neural nets can learn features themselves.]
+
+[I want to begin by reminding you of the story I told you at the beginning of
+ the semester, about Frank Rosenblatt's invention of perceptrons in 1957.
+ Remember that he held a press conference where he predicted that perceptrons
+ would be "the embryo of an electronic computer that [the Navy] expects will be
+ able to walk, talk, see, write, reproduce itself and be conscious of its
+ existence."]
+[Perceptron research continued, but something monumental happened in 1969.
+ Marvin Minsky, one of the founding fathers of AI, and Seymour Papert published
+ a book called "Perceptrons".  Sounds good, right?  Well, part of the book was
+ devoted to things perceptrons can't do.  And one of those things is XOR.]
+
+                                      x
+                                       1
+
+                           XOR  |  0  |  1  
+                         -------+-----+-----
+                            0   |  0     1
+                     x   -------+
+                      2     1   |  1     0
+
+[Think of the four outputs here as sample points in two-dimensional space.
+ Two of them are in class 1, and two of them are in class 0.  We want to find
+ a linear classifier that separates the 1's from the 0's.  Can we do it?  No.]
+[So Minsky and Papert were basically saying, "Frank.  You're telling us this
+ machine is going to be conscious of its own existence but it can't do XOR?"]
+[The book had a devastating effect on the field.  After its publication, almost
+ no research was done on neural net-like ideas for a decade, a time we now call
+ the "AI Winter".  Shortly after the book was published, Frank Rosenblatt died.
+ Officially, he died in a boating accident.  But we all know he died of
+ a broken heart.]
+
+[One thing I don't understand is why nobody at the time pointed out some almost
+ obvious ways to get around this problem.  Here's the easiest.]
+
+If you add one new quadratic feature, x_1 x_2, XOR is linearly separable in 3D.
+
+                               0----------1
+                              /|         /|
+                             / |        / |
+                            +----------+  |
+                            |  |       |  |
+                            |  |       |  |
+                            |  1-------|--+
+                            | /        | /
+                            |/         |/
+                            +----------0
+
+[Now we can find a plane that cuts through the cube obliquely and separates the
+ 0's from the 1's.]
+
+[However, there's an even more powerful way to do XOR.  The idea is to design
+ linear classifiers whose output is the input to other linear classifers.
+ That way, you should be able to emulate arbitrarily logical circuits.
+ Suppose I put together some linear predictor functions like this.]
+
+                 ------------------
+    x  --------->|  linear combo  |--
+     1   ------->------------------  \    ------------------
+       \/                             --->|  linear combo  |--> z
+       /\                             --->------------------
+      /  ------->------------------  /
+    x ---------->|  linear combo  |--
+     2           ------------------
+
+[If I interpret the output as 1 if z is positive or 0 is z is negative, can
+ I do XOR with this?]
+
+A linear combo of a linear combo is a linear combo...only works for linearly
+separable samples.
+
+[We need one more idea to make neural nets.  We need to add some sort of
+ nonlinearity between the linear combinations.  Let's call these boxes that
+ compute linear combinations "neurons".  If a neuron runs the linear
+ combination it computes through some nonlinear function before sending it on
+ to other neurons, then the neurons can act somewhat like logic gates.  The
+ nonlinearity could be as simple as clamping the output so it can't go below
+ zero.  And that's actually used in practice sometimes.]
+[The most popular traditional choice has been to use the logistic function.
+ The logistic function can't go below zero or above one, which is nice because
+ it can't ever get huge and oversaturate the other neurons it's sending
+ information to.  The logistic function is also smooth, which means it has
+ well-defined gradients we can use in gradient descent.]
+[With logistic functions between the linear combinations, here's a two-level
+ perceptron that computes the XOR function.  Note that the logistic function
+ at the output is optional; we could just take the sign of the output instead.]
+
+                         NAND
+                 --------------------\    v
+    x  --------->| s(30 - 20x - 20y)  )O--             AND
+         ------->--------------------/    \    -------------------\
+       \/                                  --->| s(20v + 20w - 30) )-> x XOR y
+       /\                                  --->-------------------/
+      /  ------>\--------------------\    /
+    y ---------> ) s(20x + 20y - 10)  >---
+                /--------------------/    w
+                          OR
+
+Network with 1 Hidden Layer
+---------------------------
+[Note:  see the hand-drawn version of this section with an illustration.]
+
+Input layer:  x , ..., x  ; x    = 1
+               1        d    d+1
+
+Hidden units:  h , ..., h  ; h    = 1
+                1        m    m+1
+
+Output layer:  a , ..., z
+                1        k
+
+[We might have more than one output so that we can build multiple classifiers
+ that share hidden units.  One of the interesting advantages of neural nets is
+ that if you train multiple classifiers simultaneously, sometimes some of them
+ come out better because they can take advantage of particularly useful hidden
+ units that first emerged to support one of the other classifiers.]
+
+Layer 1 weights:  m x (d+1) matrix V            V_i is row i
+Layer 2 weights:  k x (m+1) matrix W            W_i is row i
+
+                                   1
+Recall logistic fn s(gamma) = -----------.  Other nonlinear fns can be used.
+                                   -gamma
+                              1 + e
+
+                     -        -
+                     | s(v_1) |
+                     |        |
+For vector v, s(v) = | s(v_2) |.       [We apply s to a vector component-wise.]
+                     |   .    |
+                     |   .    |
+                     -   .    -
+
+[At this point, see hand-drawn page for depiction of neural net with one
+ hidden layer.]
+
+          3
+  h  = s(sum V   x )               In short, h = s(Vx)
+   i     i=1  ij  j
+
+  z = s(Wh) = s(W s (Vx))
+                   1
+                   ^
+                  add a 1 to end of vector
+
+[We can add more hidden layers, and for some tasks it's common to have up to
+ five hidden layers.  There are many variations you can experiment with--for
+ instance, you can have connections that go forward more than one layer.]
+
+Training
+--------
+Usually stochastic or batch gradient descent.
+
+Pick loss fn L(z, y)              e.g. L(z, y) = |z - y|^2
+               ^  ^
+     predictions  true values (could be a vector)
+
+                   n
+Cost fn is J(h) = sum L(h(X ), Y )
+                  i=1      i    i
+
+[I'm using a capital Y here because now Y is a matrix with one row for each
+ sample point and one column for each output of the neural net.  Often there
+ will be just one output, but many neural net applications have more.]
+Usually there are many local minima!
+[The cost function for a neural net is, generally, not even close to convex.
+ For that reason, it's possible to wind up in a bad minimum.  We'll talk later
+ about some clever ways to coax neural nets into better minima.]
+[Now let me ask you this.  Suppose we start by setting all the weights to zero,
+ and then we do gradient descent on the weights.  What will go wrong?]
+[The gradient descent has no way to break symmetry, you can get stuck in
+ a situation where all the weights in each layer have the same value, and they
+ have no way to become different from each other.  To avoid this problem, and
+ in the hopes of finding a better minimum, we start with random weights.]
+
+Rewrite all the weights in V & W as a vector w.  Batch gradient descent:
+
+  w <- vector of random weights
+  repeat
+    w <- w - epsilon grad J(w)
+
+[It's important to make sure the random weights aren't too big, because if
+ a unit's output gets too close to zero or one, it can get "stuck", meaning
+ that it always has roughly the same output value regardless of the input.
+ Stuck units tend to stay stuck because in that operating range, the gradient
+ s'(.) of the logistic function is close to zero.]
+[We can instead use stochastic gradient descent, which means we use the
+ gradient of one sample point's loss function at each step.  Typically, we
+ shuffle the points in a random order, or just pick one randomly at each step.]
+[The hard part of this algorithm is computing the gradient.  If you simply
+ derive one derivative for each weight, you'll find that it takes time linear
+ in the size of the neural network to compute a derivative for one weight in
+ the first layer.  Multiply that by the number of weights.  We're going to
+ spend some time learning to improve the running time to linear in the number
+ of weights.]
+
+Naive gradient computation:  O(units x edges) time
+Backpropagation:  O(edges) time
+
+Computing Gradients for Arithmetic Expressions
+----------------------------------------------
+[See the two hand-drawn pages.]
+
+The Backpropagation Alg
+-----------------------
+[See the hand-drawn page.]

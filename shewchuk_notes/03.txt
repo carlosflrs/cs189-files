@@ -1,0 +1,229 @@
+Perceptron Algorithm (cont'd)
+--------------------
+Recall:
+- linear predictor fn f(x) = w . x   (for simplicity, no alpha)
+- decision boundary {x : f(x) = 0}   (a hyperplane through the origin)
+
+- samples X_1, X_2, ..., X_n (vectors); classifications y_1, ..., y_n = +- 1
+- goal:  find weights w such that y_i X_i . w >= 0
+- goal, rewritten:  find w that minimizes R(w) = sum -y_i X_i . w     [risk fn]
+                                         i in V
+                    where V is the set of indicies i for which y_i X_i . w < 0.
+
+[Our original problem was to find a separating hyperplane in one space, which
+ I'll call x-space.  But we've transformed this into a problem of finding an
+ optimal point in a different space, which I'll call w-space. It's important
+ to understand transformations like this, where a structure in one space
+ becomes a point in another space.  In this *particular* problem, there is
+ a duality between hyperplanes and points.]
+
+_Duality_ between x-space and w-space:
+
+           x-space (primal)                w-space (dual)
+   |---------------------------------------------------------------|
+   |  hyperplane:  {y : w . y = 0} |  point:       w               |
+   |---------------------------------------------------------------|
+   |  point:       x               |  hyperplane:  {y : x . y = 0} |
+   |---------------------------------------------------------------|
+
+If a point x lies on a hyperplane H, then
+its dual hyperplane x^* contains the dual point H^*.
+
+If we want to enforce inequality x . w >= 0, that means
+  - x should be on the correct side of {y : y . w = 0} in primal x-space
+  - w   "    "  "   "     "     "   "  {v : x . v = 0} in dual w-space
+
+                 ^                    \    ^    /  
+    primal       |        X            \   |   /   dual
+                 |                      \  |  /    
+            X    |      ----             \ | /            [Observe that the
+                 |  ----                  \|/              primal points are
+       <---------+--------->     <=========+=========>     the normal vectors
+           ----  |                        /|\              for the dual lines.]
+       ----      |                       / | \     
+                 0                      /  |  \    
+                 |                     /   | w \   
+                 v                    /    v    \  
+
+[For a sample x in class O, w and x must be on the *same* side of the dual
+ hyperplane x^*.  For a sample x not in class O (X), w and x must be on
+ *opposite* sides of the dual hyperplane x^*.]
+
+[Show plots of R.  Note how R's creases match the dual chart.]
+
+[In this example, we can choose w to be any point in the bottom pizza slice;
+ all those points satisfy the inequalities.]
+
+[We have an optimization problem; we need an optimization algorithm to solve
+ it.]
+
+
+An _optimization_algorithm_:  _gradient_descent_ on R.
+
+Given a starting point w, find gradient of R with respect to w; this is the
+direction of steepest ascent.  Take a step in the opposite direction.  Recall
+[from your vector calculus class]
+
+              -         -                           -     -
+              | dR/dw_1 |                           | z_1 |
+              |         |                           |     |
+  grad R(w) = | dR/dw_2 |     and    grad (z . w) = | z_2 | = z.
+              |    .    |                           |  .  |
+              |    .    |                           |  .  |
+              | dR/dw_d |                           | z_d |
+              -         -                           -     -
+
+  grad R(w) = sum  grad -y_i X_i . w = - sum  y_i X_i
+             i in V                     i in V
+
+At any point w, we walk downhill in direction of steepest descent, - grad R(w).
+
+  w = arbitrary nonzero starting point (good choice is any y_i X_i)
+  while R(w) > 0
+    V <- set of indicies i for which y_i X_i . w < 0
+    w <- w + epsilon sum  y_i X_i
+                    i in V
+  return w
+
+epsilon is the _step_size_ aka _learning_rate_, chosen empirically.
+[Best choice depends on input problem!]
+
+[Show plot of R again.  Show typical steps.]
+
+Problem:  Slow!  Each step takes O(nd) time.  [Can we improve this?]
+
+Optimization algorithm 2:  _stochastic_gradient_descent_
+
+Idea:  each step, pick *one* misclassified X_i;
+       do gradient descent on loss fn L(X_i . w, y_i).
+
+Called the _perceptron_algorithm_.  Each step takes O(d) time.
+  [Not counting the time to search for a misclassified X_i.]
+
+  while some y_i X_i . w < 0
+    w <- w + epsilon y_i X_i
+  return w
+
+[By the way, stochastic gradient descent does not work for every problem that
+ gradient descent works for.  The perceptron risk function happens to have
+ special properties that allow stochastic gradient descent to always succeed.]
+
+
+What if separating hyperplane doesn't pass through origin?
+Add a fictitious dimension.
+
+  Hyperplane:  w . x + alpha = 0
+
+                        -     -
+                        | x_1 |
+    [ w_1 w_2 alpha ] . | x_2 | = 0
+                        |  1  |
+                        -     -
+
+                        d + 1
+Now we have samples in R     , all lying on plane x      = 1.
+                                                   d + 1
+
+Run perceptron algorithm in (d + 1)-dimensional space.
+
+[The perceptron algorithm was invented in 1957 by Frank Rosenblatt at the
+ Cornell Aeronautical Laboratory.  It was originally designed not to be a
+ program, but to be implemented in hardware for image recognition on a
+ 20 x 20 pixel image.  Rosenblatt built a Mark I Perceptron Machine
+ that ran the algorithm, complete with electric motors to do weight updates.]
+
+[Show Mark I photo.  This is what it took to process a 20 x 20 image in 1957.]
+
+[Then he had a press conference where he predicted that perceptrons would be
+ "the embryo of an electronic computer that [the Navy] expects will be able to
+ walk, talk, see, write, reproduce itself and be conscious of its existence."
+ We're still waiting on that.]
+
+[One interesting aspect of the perceptron algorithm is that it's an "online
+ algorithm", which means that if new data points come in while the algorithm
+ is already running, you can just throw them into the mix and keep looping.]
+
+Perceptron Convergence Theorem:  If data is linearly separable, perceptron
+algorithm will find a linear classifier that classifies all data correctly in
+at most O(R^2 / gamma^2) iterations, where R = max |X_i| is "radius of data"
+and gamma is the "maximum margin".  [I'll define "maximum margin" shortly.]
+
+[We're not going to prove this, because it's obsolete.]
+
+[Although the step size/learning rate doesn't appear in that big-O expression,
+ it does have an effect on the running time, but the effect is hard to
+ characterize.  The algorithm gets slower if epsilon is too small
+ because it has to take lots of steps to get down the hill.  But it
+ also gets slower if epsilon is too big for a different reason:  it
+ jumps right over the region with zero risk and oscillates back and
+ forth for a long time.]
+
+[Although stochastic gradient descent is faster for this problem than gradient
+ descent, the perceptron algorithm is still slow.  There's no reliable way to
+ choose a good step size epsilon.  Fortunately, optimization algorithms have
+ improved a lot since 1957.  You can get rid of the step size by using any
+ decent modern "line search" algorithm.  Better yet, you can find a better
+ decision boundary much more quickly by quadratic programming, which is what
+ we'll talk about next.]
+
+
+MAXIMUM MARGIN CLASSIFIERS
+==========================
+The _margin_ of a linear classifier is the distance from the decision boundary
+to the nearest sample point.  What if we make the margin as big as possible?
+
+             .  ^\   .  O    O
+           X  . | \   .   O
+               .|  \   O     
+                |   \   .O  
+                |.   \   .   
+          X     | X   \   O  
+             X  |  .   \   . O
+                |  X.   \   .O
+        <-------+--------\------>
+            X   |  X  .   \   . w . x + alpha = 1
+                       .   \
+     w . x + alpha = -1 .   \ w . x + alpha = 0
+
+We enforce the constraints
+
+  y_i (w . X_i + alpha) >= 1    for i in [1, n]
+
+[Notice that the right-hand side is a 1, rather than a 0 as it was for the
+ perceptron risk function.  It's not obvious, but this a much better way to
+ formulate the problem, partly because it makes it impossible for the weight
+ vector w to get set to zero.]
+
+If |w| = 1, the constraints imply the margin is at least 1;
+  [because w . X_i + alpha is the signed distance]
+                                                                    1
+BUT we allow w to have arbitrary length, so the margin is at least ---.
+                                                                   |w|
+                            2
+There is a _slab_ of width --- containing no samples
+                           |w|
+  [with the hyperplane running along its middle].
+
+To maximize the margin, minimize |w|.  Optimization problem:
+
+  ----------------------------------------------------------------
+  | Find w and alpha that minimize |w|^2                         |
+  | subject to y_i (w . X_i + alpha) >= 1    for all i in [1, n] |
+  ----------------------------------------------------------------
+
+Called a _quadratic_program_ in d + 1 dimensions and n constraints.
+It has one unique solution!
+
+[The reason we use |w|^2 as an objective function, instead of |w|, is that
+ the length function |w| is not smooth at zero, whereas |w|^2 is smooth
+ everywhere.]
+
+The solution gives us a _maximum_margin_classifier_, aka
+a _hard_margin_ _support_vector_machine_ (SVM).
+
+[Technically, this isn't really a support vector machine yet; it doesn't
+ fully deserve that name until we add features and kernelization, which we'll
+ do in later lectures.]
+
+[Show 3D example in (w, alpha) weight space + 2D cross-section w1 = 1/17.
+ Show optimal point on both graphs.]

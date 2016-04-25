@@ -1,0 +1,208 @@
+DECISION TREES
+==============
+Nonlinear method for classification and regression.
+
+Uses tree w/two node types:
+- internal nodes test feature values (usually just one) & branch accordingly
+- leaf nodes specify class h(x)
+
+                     -----------------
+                     | Outlook (x_1) |                   sunny overc  rain
+                     -----------------                  ------------------- 100
+                      /      |      \                   |     |     |     | x
+                     /       |       \                  | no  |     |     |  2
+                 sunny   overcast    rain               |-----|     |     | 75
+                   /         |         \                |     |     |     |
+                  /          |          \               |     |     |check|
+      ------------------     v      --------------      |     | yes | x   | 50
+      | Humidity (x_2) |    yes     | Wind (x_3) |      | yes |     |  3  |
+      ------------------     v      --------------      |     |     |     |
+       /              \              /          \       |     |     |     | 25
+      /                \            /            \      |     |     |     |
+   > 75%             <= 75%      > 20           <= 20   |     |     |     |
+    /                    \        /                \    ------------------- 0
+   v                      v      v                  v             x
+  no                     yes    no                 yes             1
+
+- Cuts x-space into rectangular cells
+- Works well with both categorical and quantitative features
+- Interpretable result (inference)
+- Decision boundary can be arbitrarily complicated
+[Show comparison of SVM vs. dec. tree on 2 examples (treelinearcompare.pdf)]
+
+Consider classification first.  Greedy, top-down learning heuristic:
+[This algorithm is more or less obvious, and has been rediscovered many times.
+ It's naturally recursive.  I'll show how it works for classification first;
+ later I'll talk about how it works for regression.]
+
+Let S subseteq {1, 2, ..., n} be list of sample indices.
+Top-level call:  S = {1, 2, ..., n}.
+
+GrowTree(S)
+if (y_i = C for all i in S and some class C) then {
+  return new leaf(C)                             [We say the leaves are "pure"]
+} else {
+  choose best splitting feature j and splitting point beta (*)
+  S_l = {i : X_ij < beta}                           [Or you could use <= and >]
+  S_r = {i : X_ij >= beta}
+  return new node(j, beta, GrowTree(S_l), GrowTree(S_r))
+}
+
+(*) How to choose best split?
+- Try all splits.              [All features, and all splits within a feature.]
+- For a set S, let J(S) be the _cost_ of S.
+- Choose the split that minimizes J(S_l) + J(S_r); or,
+                                                   |S_l| J(S_l) + |S_r| J(S_r)
+         the split that minimizes weighted average ---------------------------.
+                                                          |S_l| + |S_r|
+
+[Here, I'm using the vertical brackets |.| to denote set cardinality.]
+
+How to choose cost J(S)?
+[I'm going to start by suggesting a mediocre cost function, so you can see why
+ it's mediocre.]
+Idea 1 (bad):  Label S with the class C that labels the most samples in S.
+               J(S) <- # of samples in S not in class C.
+
+                           -----------------
+                           | 6 C       5 D |  J(S) = 5
+                           -----------------
+                            /      x      \
+                           /        1      \
+                          /                 \  
+                         /                   \
+                        /                     \
+             -----------------           -----------------
+  J(S ) = 1  | 4 C       1 D |           | 2 C       4 D |  J(S ) = 2
+     l       -----------------           -----------------     r
+
+Problem:  Sometimes we make "progress", yet J(S ) + J(S ) = J(S).
+                                               l       r
+                           -----------------
+                           | 20 C     10 D |  J(S) = 10
+                           -----------------
+                            /      x      \
+                           /        1      \
+                          /                 \  
+                         /                   \
+                        /                     \
+             -----------------           -----------------
+  J(S ) = 8  | 12 C      8 D |           | 8 C       2 D |  J(S ) = 2
+     l       -----------------           -----------------     r
+              /     x       \              /    x      \
+             /       2       \            /      3      \
+            /                 \          /               \  
+           /                   \        /                 \
+          /                     \      /                   \
+      --------              -------  -------            -------
+      | 12 C |              | 8 D |  | 8 C |            | 2 D |
+      --------              -------  -------            -------
+
+[Notice that even though the first split doesn't reduce the total cost at all,
+ we're still making progress, because after one more level of splits, we're
+ done!]
+
+Idea 2 (good):  Measure the _entropy_.       [An idea from information theory.]
+Let Y be a random class variable, and suppose P(Y = C) = p_C.
+The _surprise_ of Y being class C is S(Y = C) = - log_2 p_C.     [Nonnegative.]
+- event w/prob. 1 gives us zero surprise.
+- event w/prob. 0 gives us infinite surprise!
+[In information theory, the surprise is equal to the expected number of bits of
+ information we need to transmit which events happened to a recipient who knows
+ the probabilities of the events.  Often this mean using fractional bits, which
+ only makes sense when you're compiling lots of events into a single message;
+ e.g. a sequence of biased coin flips.]
+
+The _entropy_ of an index set S is the average surprise
+                                     |{i in S : y_i = C}|    [The proportion of
+ H(S) = - sum p  log  p , where p  = --------------------.    samples in S that
+           C   C    2  C         C           |S|              are in class C.]
+
+If all samples in S belong to same class?  H(S) = -1 log_2 1 = 0.
+Half class C, half class D?  H(S) = -0.5 log_2 0.5 - 0.5 log_2 0.5 = 1.
+n samples, all different classes?  H(S) = - log_2 (1/n) = log_2 n.
+
+[Show graph of entropy for 2-class case (entropy.pdf)]
+
+                                             |S_l| H(S_l) + |S_r| H(S_r)
+Weighted avg entropy after split is H      = ---------------------------.
+                                     after          |S_l| + |S_r|
+
+Choose split that maximizes _information_gain_ H(S) - H_after.
+
+                       -----------------           14    14   16    16
+                       | 14 C     16 D |  H(S) = - -- lg -- - -- lg -- = 0.997
+                       -----------------           30    30   30    30
+                        /      x      \
+                       /        1      \
+                      /                 \  
+                     /                   \
+                    /                     \
+         -----------------           -----------------
+         | 13 C      4 D |           | 1 C      12 D |
+         -----------------           -----------------
+            13    13   4     4                      1     1    12    12
+  H(S ) = - -- lg -- - -- lg -- = 0.787   H(S ) = - -- lg -- - -- lg -- = 0.391
+     l      17    17   17    17              r      13    13   13    13
+
+H_after = 0.615;    info gain = 0.382
+
+Info gain always positive *except* when one child is empty or
+for all C, P(y_i = C | i in S_l) = P(y_i = C | i in S_r):
+
+[Recall graph of entropy.]
+
+            entropy                        % misclassified
+          ^                                 ^             
+        1 |   ---                       0.5 |    ^        
+          |  -   -                          |   / \       
+          | /     \                         |  /   \      
+          |/       \                        | /     \     
+          |         |                       |/       \    
+          +----+----+> P                    +----+----+> P
+          0   0.5   1                       0   0.5   1   
+
+        strictly concave                concave, not strict
+
+[Suppose we pick two points on the entropy curve, then draw a line segment
+ connecting them.  Because the entropy curve is strictly concave, the interior
+ of the line segment is strictly below the curve.  Any point on that segment
+ represents a weighted average of the two entropies for suitable weights.
+ Whereas the point directly above that point represents the entropy if you
+ unite the two sets into one.  So the union of two nonempty sets has greater
+ entropy than the weighted average of the entropies of the two sets, unless the
+ two sets both have exactly the same p.]
+[For the graph on the right, on the other hand, if we draw a line segment
+ connecting two points on the curve, the segment might lie entirely on the
+ curve.  In that case, uniting the two sets into one, or splitting one into
+ two, changes neither the total misclassified samples nor the % misclassified.]
+[By the way, the entropy is not the only function that works well.  Many
+ concave functions work fine, including the simple polynomial p(1-p).]
+
+More on choosing a split:
+- For binary feature x_i, children are x_i = 0 & x_i = 1.
+- If x_i has 3+ discrete values, split depends on application.
+  [Sometimes it makes sense to use multiway splits; sometimes binary splits.]
+- If x_i is quantitative, sort samples in S by feature x_i; remove duplicates;
+  try splitting between each pair of consecutive samples.
+  [We can radix sort the samples in linear time, and if n is huge we should.]
+  Clever Bit:  As you scan sorted list from left to right, you can update
+               entropy in O(1) time per sample!
+[This is important for obtaining a fast tree-building time.]
+[Draw a row of X's and O's; show how we update the # of X's and # of O's in
+ each of S_l and S_r as we scan from left to right.]
+
+Algs & running times:
+- Test point:  Walk down tree until leaf.  Return its label.
+  Worst-case time is O(tree depth).
+  For binary features, that's <= d.      [Quantitative features may go deeper.]
+  Usually (not always) <= O(log n).
+- Training:  For binary features, try O(d) splits at each node.
+  For quantitative features,      try O(n'd) splits; n' = samples in node
+  Either way                       => O(n'd) time at this node
+  [Quantitative features are asymptotically just as fast as binary features
+   because of our clever way of computing the entropy for each split.]
+  Each sample participates in O(depth) nodes, costs O(d) time in each node.
+  Running time <= O(nd depth).
+  [As nd is the size of the design matrix X, and the depth is often
+   logarithmic, this is a surprisingly reasonable running time.]
